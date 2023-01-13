@@ -4,7 +4,7 @@ A project that aims to make a UF parking map which is understandable and easy to
 
 ## Team Members - 
 #### Front End - 
-- 
+- Natalie Valcin
 - 
 #### Back End - 
 - Christopher Bursch (burschc)
