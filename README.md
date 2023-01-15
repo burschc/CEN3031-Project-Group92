@@ -5,7 +5,7 @@ A project that aims to make a UF parking map which is understandable and easy to
 ## Team Members - 
 #### Front End - 
 - Natalie Valcin
-- 
+- Samantha Barthelemy (sbarthelemy01)
 #### Back End - 
 - Christopher Bursch (burschc)
 - Yovany Molina (yomole)
