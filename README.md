@@ -10,3 +10,6 @@ A project that aims to make a UF parking map which is understandable and easy to
 #### Back End - 
 - Christopher Bursch (burschc)
 - Yovany Molina (yomole)
+
+## Sprint 1 Information
+To start up the web application backend, clone the repository and type `go run platform/main.go` in a console that is in the top level directory of the app (`CEN3031-Project-Group92`). Alternatively, you can launch the provided executable (`main.exe`) if you are a Windows user.
