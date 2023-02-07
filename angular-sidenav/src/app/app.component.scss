@@ -1,0 +1,31 @@
+.main-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: darkblue;
+
+    mat-toolbar {
+
+        background: darkblue;
+        color: white;
+    }
+    
+    mat-sidenav {
+    
+        margin:16px;
+        width: 200px;
+        border-right: none;
+        background: blue;
+        color: white;
+        border-radius: 10px;
+        padding: 16px;
+        text-align: center;
+    
+    }
+
+
+
+}
+

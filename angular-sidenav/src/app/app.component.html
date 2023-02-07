@@ -1,0 +1,39 @@
+<div>
+  <mat-sidenav-container class= "main-container">
+    <mat-sidenav #sidebarRef opened mode='side' [(opened)]= 'isSidebarOpen'>
+    
+      <button mat-button class="menu-button">
+          <span>Settings</span>
+      </button>
+      <br>
+
+      <button mat-button class="menu-button">
+        <span>Account</span>
+      </button>
+      <br>
+
+      <button mat-button class="menu-button">
+        <span>Schedules</span>
+      </button>
+      <br>
+      
+      <button mat-button class="menu-button">
+        <span>About</span>
+      </button>
+      <br>
+
+    </mat-sidenav>
+    
+    <mat-sidenav-content>
+        <mat-toolbar color='primary'><button mat-icon-button (click)= 'sidebarRef.toggle()'> <mat-icon>menu</mat-icon></button>Gator Locator</mat-toolbar>
+
+        
+    </mat-sidenav-content>
+
+  </mat-sidenav-container>
+
+</div>
+
+
+
+
