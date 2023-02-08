@@ -1,6 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
-import {BreakpointObserver} from '@angular/cdk/layout';
+import { MatDialog } from '@angular/material/dialog';
+import { PopupComponent } from './popup/popup.component';
+
 
 @Component({
   selector: 'app-root',
@@ -10,10 +12,7 @@ import {BreakpointObserver} from '@angular/cdk/layout';
 export class AppComponent {
   
   title = 'angular-sidenav'; 
-  
 
-
-  
   isSidebarOpen = false;
 
   openSidebar(){
@@ -23,4 +22,12 @@ export class AppComponent {
   closeSidebar(){
     this.isSidebarOpen = false;
   }
+
+
+  constructor(private dialogRef : MatDialog){}
+  openDialog(){
+    this.dialogRef.open(PopupComponent)
+  }
+
+
 }

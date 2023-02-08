@@ -1,39 +1,40 @@
+
 <div>
-  <mat-sidenav-container class= "main-container">
-    <mat-sidenav #sidebarRef opened mode='side' [(opened)]= 'isSidebarOpen'>
+<mat-sidenav-container>
     
-      <button mat-button class="menu-button">
-          <span>Settings</span>
+    <mat-sidenav #sidebarRef opened mode='side' [(opened)]= 'isSidebarOpen'>
+
+      
+      <button mat-button  (click)= "openDialog()">
+        <span>Settings</span>
       </button>
       <br>
 
-      <button mat-button class="menu-button">
+      <button mat-button  (click)= "openDialog()">
         <span>Account</span>
       </button>
       <br>
 
-      <button mat-button class="menu-button">
+      <button mat-button (click)= "openDialog()">
         <span>Schedules</span>
       </button>
       <br>
-      
-      <button mat-button class="menu-button">
+
+      <button mat-button  (click)= "openDialog()">
         <span>About</span>
       </button>
       <br>
 
     </mat-sidenav>
-    
+
     <mat-sidenav-content>
-        <mat-toolbar color='primary'><button mat-icon-button (click)= 'sidebarRef.toggle()'> <mat-icon>menu</mat-icon></button>Gator Locator</mat-toolbar>
 
-        
+      <mat-toolbar><button mat-icon-button (click)= 'sidebarRef.toggle()'> <mat-icon>menu</mat-icon></button>Gator Locator</mat-toolbar>
+
+      <div class="content mat-elevation-z8">
+            Map Content
+      </div>
+
     </mat-sidenav-content>
-
-  </mat-sidenav-container>
-
+</mat-sidenav-container>
 </div>
-
-
-
-
