@@ -35,6 +35,8 @@ As a frequent visitor of UF, I want to know when parking restrictions are lifted
 ## Issues Planned to Address
 We planned for sprint one to essentially allow for us to get our bearings properly with Go and Typescript, and generally get everything set up for future sprints. 
 As such, we primarily hoped to get Issues 1, 2, and 3 done, as they act as set up for both front and back end, and would connect them together. Other issues past the first three are mostly future plans and functionality we would hope to get to in a future sprint.
+
 ## Issues Completed
+The issues that were successgully completed were (1) setting up the Go environment, (2) ssetting up a basic web server, (3) implementing a map into the application using Leaflet, and (9).
 
 ## Explanation for Issues not Completed
