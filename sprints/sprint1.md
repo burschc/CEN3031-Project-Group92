@@ -7,7 +7,7 @@
 
 ## User Stories
 
-Use the links below to go to the issue for each user story. Alternatively, use the [project's page](https://github.com/users/burschc/projects/1).
+Use the links below to go to the issue for each user story. Alternatively, use the [projects page](https://github.com/users/burschc/projects/1).
 
 ### [Issue 1: Setup a basic Go enviornment](https://github.com/burschc/CEN3031-Project-Group92/issues/1)
 As a security-conscious user, I want to have simple centralized source code access to make sure the application will not do any unwanted or nefarious actions.
@@ -33,7 +33,8 @@ As a UF student, I want to have access to an account so that I can store my pref
 As a frequent visitor of UF, I want to know when parking restrictions are lifted so that I don’t waste time paying for parking.
 
 ## Issues Planned to Address
-
+We planned for sprint one to essentially allow for us to get our bearings properly with Go and Typescript, and generally get everything set up for future sprints. 
+As such, we primarily hoped to get Issues 1, 2, and 3 done, as they act as set up for both front and back end, and would connect them together. Other issues past the first three are mostly future plans and functionality we would hope to get to in a future sprint.
 ## Issues Completed
 
 ## Explanation for Issues not Completed
