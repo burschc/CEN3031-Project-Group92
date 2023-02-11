@@ -8,9 +8,9 @@
 <body>
     <div style="display: flex">
         <h1 style="display: flex; flex: 0.5; margin-left: 20px">UF Parking Map Plus</h1>
-        <form action="/map/search" method="POST" style="display:flex; flex: 1;">
-            <label for="/map/search" style="display:flex; align-items: center; padding-right: 5px;">Address or Building Name:</label>
-            <input id=/map/search name="/map/search" type="search" placeholder="Address or Building" style="width: 50%;">
+        <form action="/api/map/search" method="POST" style="display:flex; flex: 1;">
+            <label for="map/search" style="display:flex; align-items: center; padding-right: 5px;">Address or Building Name:</label>
+            <input id=map/search name="map/search" type="search" placeholder="Address or Building" style="width: 50%;">
         </form>
     </div>
 
@@ -23,9 +23,9 @@
     <div>
         <h2 style="text-align: center">Filters</h2>
 
-        <form style="text-align: center" action="/filter/pd" method="POST">
+        <form style="text-align: center" action="/api/filter/pd" method="POST">
             <label for="filter/pd">Parking Decal:</label>
-            <select name="filter/pd", id="filter/pd" onchange="this.form.submit()">
+            <select name="filter/pd", id="api/filter/pd" onchange="this.form.submit()">
                 <option value="green"> Green </option>
                 <option value="parkride"> Park & Ride</option>
                 <option value="red1"> Red 1</option>

@@ -65,7 +65,8 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "UFParkingMap:build:production"
+              "browserTarget": "UFParkingMap:build:production",
+              "proxyConfig": "proxy.config.json"
             },
             "development": {
               "browserTarget": "UFParkingMap:build:development"

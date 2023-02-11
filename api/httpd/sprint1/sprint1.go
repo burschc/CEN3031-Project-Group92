@@ -26,11 +26,13 @@ func SearchPostHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	searchRequest := r.PostForm.Get("/map/search")
+	searchRequest := r.PostForm.Get("map/search")
+
 	log.Print("Received search request for : " + searchRequest)
 
 	//Reload the initial page.
-	PageLoad(w, r)
+	//PageLoad(w, r)
+	w.Write([]byte(searchRequest))
 }
 
 // FilterPostHandler is responsible for processing user input for the filters.
