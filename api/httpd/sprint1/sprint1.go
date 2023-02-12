@@ -17,7 +17,11 @@ func RegisterHandlers(r *mux.Router) {
 	r.HandleFunc("/map/search", searchPostHandler).Methods("POST")
 	r.HandleFunc("/filter/pd", filterPostHandler).Methods("POST")
 
-	r.HandleFunc("/favicon"+faviconName, faviconHandler)
+	//Handler for favicon requests. This is also useful to tie any static files we wish to serve to frontend.
+	r.PathPrefix("/api/favicon/").Handler(http.StripPrefix("/api/favicon",
+		http.FileServer(http.Dir("frontMockup/favicon"))))
+
+	//The most important header code. Handle with extreme caution.
 	r.HandleFunc("/teapot", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusTeapot)
 		_, err := w.Write([]byte("Short and stout"))
@@ -34,10 +38,6 @@ func pageLoad(w http.ResponseWriter, _ *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-func faviconHandler(w http.ResponseWriter, _ *http.Request) {
-	log.Print("Test")
 }
 
 // searchPostHandler is responsible for processing user input at the top search bar.
