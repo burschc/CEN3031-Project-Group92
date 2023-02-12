@@ -1,6 +1,7 @@
 package sprint1
 
 import (
+	"github.com/gorilla/mux"
 	"html/template"
 	"log"
 	"net/http"
@@ -8,8 +9,26 @@ import (
 
 var sprintOneSite = template.Must(template.ParseGlob("frontMockup/*.html"))
 
-// PageLoad loads the mockup of the UF Parking Plus application page made for sprint 1.
-func PageLoad(w http.ResponseWriter, r *http.Request) {
+const faviconName = "/icons8-map-marker-material-filled-32.ico"
+
+// RegisterHandlers ties the URL path and methods to the correct function.
+func RegisterHandlers(r *mux.Router) {
+	r.HandleFunc("/sprint1", pageLoad)
+	r.HandleFunc("/map/search", searchPostHandler).Methods("POST")
+	r.HandleFunc("/filter/pd", filterPostHandler).Methods("POST")
+
+	r.HandleFunc("/favicon"+faviconName, faviconHandler)
+	r.HandleFunc("/teapot", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusTeapot)
+		_, err := w.Write([]byte("Short and stout"))
+		if err != nil {
+			log.Print(err)
+		}
+	})
+}
+
+// pageLoad loads the mockup of the UF Parking Plus application page made for sprint 1.
+func pageLoad(w http.ResponseWriter, _ *http.Request) {
 
 	err := sprintOneSite.ExecuteTemplate(w, "index.html", nil)
 	if err != nil {
@@ -17,8 +36,12 @@ func PageLoad(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// SearchPostHandler is responsible for processing user input at the top search bar.
-func SearchPostHandler(w http.ResponseWriter, r *http.Request) {
+func faviconHandler(w http.ResponseWriter, _ *http.Request) {
+	log.Print("Test")
+}
+
+// searchPostHandler is responsible for processing user input at the top search bar.
+func searchPostHandler(w http.ResponseWriter, r *http.Request) {
 	log.Print("Not implemented yet!")
 
 	err := r.ParseForm()
@@ -32,11 +55,14 @@ func SearchPostHandler(w http.ResponseWriter, r *http.Request) {
 
 	//Reload the initial page.
 	//PageLoad(w, r)
-	w.Write([]byte(searchRequest))
+	_, err = w.Write([]byte(searchRequest))
+	if err != nil {
+		log.Print(err)
+	}
 }
 
-// FilterPostHandler is responsible for processing user input for the filters.
-func FilterPostHandler(w http.ResponseWriter, r *http.Request) {
+// filterPostHandler is responsible for processing user input for the filters.
+func filterPostHandler(w http.ResponseWriter, r *http.Request) {
 	log.Print("Not implemented yet!")
 
 	err := r.ParseForm()
@@ -48,5 +74,8 @@ func FilterPostHandler(w http.ResponseWriter, r *http.Request) {
 
 	log.Print("Decal selected was: " + decal)
 
-	PageLoad(w, r)
+	_, err = w.Write([]byte(decal))
+	if err != nil {
+		log.Print(err)
+	}
 }

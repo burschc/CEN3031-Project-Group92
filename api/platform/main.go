@@ -1,11 +1,11 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 	"os"
 	"time"
+	"ufpmp/httpd/app_handler"
 	"ufpmp/httpd/sprint1"
 
 	"github.com/gorilla/handlers"
@@ -14,44 +14,38 @@ import (
 )
 
 func main() {
-	//Run a command to create a new window using the system's default browser.
-	err := browser.OpenURL("http://localhost:8080/api/sprint1")
-	if err != nil {
-		log.Print(err)
-	}
 
-	//Create the GorillaMux router and register some endpoints for the mockup application.
+	//Create the GorillaMux router and subrouter for general api calls.
 	r := mux.NewRouter()
-
 	api := r.PathPrefix("/api").Subrouter()
 
-	api.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		log.Print("LOG!")
+	//Start the logging middleware.
+	rLogged := handlers.LoggingHandler(os.Stdout, r)
 
-		json, err := json.RawMessage(`{"Hello", "World"}`).MarshalJSON()
-		if err != nil {
-			log.Print("Error when making the json response!")
-			log.Print(err)
+	//Process any command line arguments.
+	for _, arg := range os.Args[1:] {
 
-			//Print an error 503 to let the requester know it can't be done
-			w.WriteHeader(http.StatusServiceUnavailable)
-			return
+		//Mockup command line option
+		if arg == "-m" {
+			//Run a command to create a new window using the system's default browser.
+			err := browser.OpenURL("http://localhost:8080/api/sprint1")
+			if err != nil {
+				log.Print(err)
+			}
+
+			//Register the URLs associated with the sprint 1 mockup.
+			sprint1.RegisterHandlers(api)
+
+			log.Print("Registered Sprint 1 mockup URLs.")
 		}
 
-		//Return the JSON data to the caller.
-		w.Write(json)
-	})
+	}
 
-	api.HandleFunc("/sprint1", sprint1.PageLoad)
-	api.HandleFunc("/map/search", sprint1.SearchPostHandler).Methods("POST")
-	api.HandleFunc("/filter/pd", sprint1.FilterPostHandler).Methods("POST")
-
-	//Start the logging middleware and start web server on port 8080.
-	rlogged := handlers.LoggingHandler(os.Stdout, r)
+	app_handler.RegisterHandlers(api)
 
 	//Create a server with the following properties:
 	server := &http.Server{
-		Handler: rlogged,
+		Handler: rLogged,
 		Addr:    "localhost:8080",
 
 		WriteTimeout: 15 * time.Second,
