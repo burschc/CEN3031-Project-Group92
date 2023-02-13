@@ -5,7 +5,9 @@ import (
 	"net/http"
 	"os"
 	"time"
-	"ufpmp/httpd/app_handler"
+	"ufpmp/httpd"
+	"ufpmp/httpd/app_handlers"
+	"ufpmp/httpd/app_handlers/decal_filter"
 	"ufpmp/httpd/sprint1"
 
 	"github.com/gorilla/handlers"
@@ -39,9 +41,15 @@ func main() {
 			log.Print("Registered Sprint 1 mockup URLs.")
 		}
 
+		//Clear the cache
+		if arg == "-cc" {
+			httpd.ClearJSONCache()
+		}
+
 	}
 
-	app_handler.RegisterHandlers(api)
+	app_handlers.HttpHandlers(api)
+	decal_filter.DecalFilterHandlers(api)
 
 	//Create a server with the following properties:
 	server := &http.Server{

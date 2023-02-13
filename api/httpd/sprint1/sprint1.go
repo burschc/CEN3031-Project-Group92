@@ -9,8 +9,6 @@ import (
 
 var sprintOneSite = template.Must(template.ParseGlob("frontMockup/*.html"))
 
-const faviconName = "/icons8-map-marker-material-filled-32.ico"
-
 // RegisterHandlers ties the URL path and methods to the correct function.
 func RegisterHandlers(r *mux.Router) {
 	r.HandleFunc("/sprint1", pageLoad)

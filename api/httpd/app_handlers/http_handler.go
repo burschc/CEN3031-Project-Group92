@@ -1,4 +1,4 @@
-package app_handler
+package app_handlers
 
 import (
 	"encoding/json"
@@ -8,8 +8,8 @@ import (
 )
 
 // RegisterHandlers ties the URL path and methods to the correct function.
-func RegisterHandlers(r *mux.Router) {
-	r.HandleFunc("/", TestHandler)
+func HttpHandlers(r *mux.Router) {
+	r.HandleFunc("/test", TestHandler)
 }
 
 func TestHandler(w http.ResponseWriter, _ *http.Request) {
