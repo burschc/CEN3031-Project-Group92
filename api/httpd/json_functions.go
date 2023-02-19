@@ -13,6 +13,13 @@ const JsonCachePath = "cache/json/"
 
 // GetJSONFromURL gets a json file from an url and stores it in the local backend cache.
 func GetJSONFromURL(jsonURL string, fileName string) {
+	//Check that the Json Cache Path exists.
+	if _, err := os.Stat(JsonCachePath); err != nil {
+		log.Print("cache path " + JsonCachePath + " does not exist. Creating...")
+		if err = os.MkdirAll(JsonCachePath, os.ModePerm); err != nil {
+			log.Fatal(err)
+		}
+	}
 
 	//Check if the file already exists in the cache.
 	if _, err := os.Stat(JsonCachePath + fileName); err == nil {
@@ -37,6 +44,7 @@ func GetJSONFromURL(jsonURL string, fileName string) {
 		return
 	}
 
+	//Create a file in the Json Cache path and copy over the data to it.
 	file, err := os.Create(JsonCachePath + fileName)
 	if err != nil {
 		log.Print(err)

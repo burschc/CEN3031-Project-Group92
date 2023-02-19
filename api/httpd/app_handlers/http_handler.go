@@ -5,11 +5,14 @@ import (
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
+	"ufpmp/httpd"
 )
 
-// RegisterHandlers ties the URL path and methods to the correct function.
+// HttpHandlers ties the URL path and methods to the correct function.
 func HttpHandlers(r *mux.Router) {
 	r.HandleFunc("/test", TestHandler)
+
+	log.Print("Registered base handlers.")
 }
 
 func TestHandler(w http.ResponseWriter, _ *http.Request) {
@@ -17,17 +20,10 @@ func TestHandler(w http.ResponseWriter, _ *http.Request) {
 
 	response, err := json.RawMessage(`{"Hello", "World"}`).MarshalJSON()
 	if err != nil {
-		log.Print("Error when making the json response!")
-		log.Print(err)
-
-		//Print an error 503 to let the requester know it can't be done
-		w.WriteHeader(http.StatusServiceUnavailable)
+		httpd.PipeError(w, err)
 		return
 	}
 
 	//Return the JSON data to the caller.
-	_, err = w.Write(response)
-	if err != nil {
-		log.Print(err)
-	}
+	_, _ = w.Write(response)
 }

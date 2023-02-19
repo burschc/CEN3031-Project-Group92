@@ -44,6 +44,7 @@ func main() {
 		//Clear the cache
 		if arg == "-cc" {
 			httpd.ClearJSONCache()
+			log.Print("Cleared JSON Cache.")
 		}
 
 	}
@@ -60,5 +61,6 @@ func main() {
 		ReadTimeout:  15 * time.Second,
 	}
 
+	log.Print("Starting http server accessible through " + server.Addr)
 	log.Fatal(server.ListenAndServe())
 }
