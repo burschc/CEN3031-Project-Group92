@@ -10,12 +10,13 @@ import (
 
 // HttpHandlers ties the URL path and methods to the correct function.
 func HttpHandlers(r *mux.Router) {
-	r.HandleFunc("/test", TestHandler)
+	r.HandleFunc("/test", testHandler)
 
 	log.Print("Registered base handlers.")
 }
 
-func TestHandler(w http.ResponseWriter, _ *http.Request) {
+// testHandler returns a json response when going to /api/test
+func testHandler(w http.ResponseWriter, _ *http.Request) {
 	log.Print("LOG!")
 
 	response, err := json.RawMessage(`{"Hello", "World"}`).MarshalJSON()

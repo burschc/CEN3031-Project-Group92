@@ -3,3 +3,4 @@ node_modules
 .git
 .idea
 api/cache/json/*.json
+api/python/venv/

@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"time"
 	"ufpmp/httpd"
 	"ufpmp/httpd/app_handlers"
@@ -52,6 +53,9 @@ func main() {
 	app_handlers.HttpHandlers(api)
 	decal_filter.DecalFilterHandlers(api)
 
+	log.Print("Checking Python Virtual Environment...\n\n")
+	SetupPythonVenv()
+
 	//Create a server with the following properties:
 	server := &http.Server{
 		Handler: rLogged,
@@ -63,4 +67,14 @@ func main() {
 
 	log.Print("Starting http server accessible through " + server.Addr)
 	log.Fatal(server.ListenAndServe())
+}
+
+// SetupPythonVenv runs a python script which checks if the virtual environment exists and creates it if it doesn't.
+// The python virtual environment is useful for running critical python scripts (like gjf) with no impact or remaining
+// files for the user if they later decide to delete/uninstall the application.
+func SetupPythonVenv() {
+	cmd := exec.Command("py", "python/make_venv.py")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	log.Print(cmd.Run())
 }

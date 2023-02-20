@@ -1,7 +1,6 @@
 package decal_filter
 
 import (
-	"compress/gzip"
 	"encoding/json"
 	"github.com/gorilla/mux"
 	geojson "github.com/paulmach/go.geojson"
@@ -11,105 +10,113 @@ import (
 	"ufpmp/httpd"
 )
 
-// parkingLots is the URL of the parkings lots json file used for the decal filter.
-const parkingLots = "https://campusmap.ufl.edu/library/cmapjson/parking_lots.json"
+// parkingLots is the URL of the parking lots json file used for the decal filter.
+// There are two possible json files for parking lots, and this one seems to be the more updated version.
+// The other json file can be found here: https://campusmap.ufl.edu/library/cmapjson/parking_lots.json.
+const parkingLots = "https://campusmap.ufl.edu/assets/parking_polys.json"
+
+// parkingJSON is the filename of the json file with the parking data located in the json cache folder.
+const parkingJSON = "parking_lots.json"
+
+// decalProperty is the title of the feature property which houses the decal for the lot.
+const decalProperty = "Lot_Class"
 
 // DecalFilterHandlers registers the functions which deal with the parking decal filters.
+// It logs a message confirming that all paths in the function have been registered.
 func DecalFilterHandlers(r *mux.Router) {
-	r.HandleFunc("/filter/decal/{decal}", findDecal)
-	r.HandleFunc("/filter/decals/", getDecalTypes)
-	r.HandleFunc("/filter/error/", func(w http.ResponseWriter, r *http.Request) {
-		httpd.PipeError(w, gzip.ErrChecksum)
-	})
+	r.HandleFunc("/filter/decal/{decal}", findDecalHandler)
+	r.HandleFunc("/filter/decals", decalTypesHandler)
 
 	log.Print("Registered filter handlers.")
 }
 
-// findDecal looks through the parking_lots json file for lots which are valid for the request's passed in decal.
-func findDecal(w http.ResponseWriter, r *http.Request) {
-	//Extract the variables which should include the decal from the request.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//												HTTP HANDLERS														  //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// decalTypesHandler returns a list of all decal types in the json file as a json array to the requester.
+func decalTypesHandler(w http.ResponseWriter, _ *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(getDecalTypes()); err != nil {
+		httpd.PipeError(w, err)
+	}
+}
+
+// findDecalHandler returns a feature collection consisting of all lots which match the given decal.
+func findDecalHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(findDecal(vars["decal"])); err != nil {
+		httpd.PipeError(w, err)
+	}
+}
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//												UTILITY FUNCTIONS													  //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// findDecal looks through the parking_lots json file for lots which are valid for the request's passed in decal.
+// It returns a feature collection.
+func findDecal(decal string) *geojson.FeatureCollection {
 	//Get the JSON file if we already do not have it in the cache.
-	httpd.GetJSONFromURL(parkingLots, "parking_lots.json")
+	if !httpd.IsFresh(parkingJSON) {
+		log.Print(parkingJSON + " is not fresh!")
+		getNewJSON()
+	}
 
-	//Look in the JSON file for the lots that are accepted by the variable passed in.
-	if vars["decal"] == "any" {
-		file, err := os.ReadFile(httpd.JsonCachePath + "parking_lots.json")
-		if err != nil {
-			httpd.PipeError(w, err)
-			return
-		}
+	/*Make a new feature collection and then sift through the json file's feature collection for entries that
+	  have the same decal property value as wwe are looking for.*/
+	filteredLots := geojson.NewFeatureCollection()
 
-		_, err = w.Write(file)
-		if err != nil {
-			httpd.PipeError(w, err)
-		}
-	} else {
-		//Make a new JSON file with these isolated lots and write it as a response.
-		file, err := os.ReadFile(httpd.JsonCachePath + "parking_lots.json")
-		if err != nil {
-			httpd.PipeError(w, err)
-			return
-		}
+	//Open the json file as a feature collection and return that feature collection.
+	fc := httpd.ConvertToFC(parkingJSON)
 
-		fc, err := geojson.UnmarshalFeatureCollection(file)
-		if err != nil {
-			httpd.PipeError(w, err)
-			return
-		}
+	//If the decal is 'any' return the full feature collection.
+	if decal == "any" {
+		return fc
+	}
 
-		filteredLots := geojson.NewFeatureCollection()
-
-		for _, v := range fc.Features {
-			if v.Properties["DECAL"] == vars["decal"] {
-				filteredLots.AddFeature(v)
-			}
-		}
-
-		toWrite, err := filteredLots.MarshalJSON()
-		if err != nil {
-			httpd.PipeError(w, err)
-		}
-
-		_, err = w.Write(toWrite)
-		if err != nil {
-			httpd.PipeError(w, err)
+	//Scan through and isolate those features whose decal property matches our target decal.
+	for _, v := range fc.Features {
+		if v.Properties[decalProperty] == decal {
+			filteredLots.AddFeature(v)
 		}
 	}
 
-	log.Print(vars["decal"])
+	return filteredLots
 }
 
 // getDecalTypes returns an array containing all the unique decals in the parking lots json file.
-func getDecalTypes(w http.ResponseWriter, _ *http.Request) {
+func getDecalTypes() []interface{} {
 	//Get the JSON file if we already do not have it in the cache.
-	httpd.GetJSONFromURL(parkingLots, "parking_lots.json")
-
-	file, err := os.ReadFile(httpd.JsonCachePath + "parking_lots.json")
-	if err != nil {
-		httpd.PipeError(w, err)
-		return
-	}
-
-	fc, err := geojson.UnmarshalFeatureCollection(file)
-	if err != nil {
-		httpd.PipeError(w, err)
-		return
+	if !httpd.IsFresh(parkingJSON) {
+		log.Print(parkingJSON + " is not fresh!")
+		getNewJSON()
 	}
 
 	set := make(map[interface{}]bool)
 	var decals []interface{}
 
+	//Unmarshall the file into a feature collection we can traverse.
+	fc := httpd.ConvertToFC(parkingJSON)
+
+	//Traverse through and find unique decal types using a set.
 	for _, v := range fc.Features {
-		if !set[v.Properties["DECAL"]] {
-			decals = append(decals, v.Properties["DECAL"])
-			set[v.Properties["DECAL"]] = true
+		if !set[v.Properties[decalProperty]] {
+			decals = append(decals, v.Properties[decalProperty])
+			set[v.Properties[decalProperty]] = true
 		}
 	}
 
-	err = json.NewEncoder(w).Encode(decals)
-	if err != nil {
-		httpd.PipeError(w, err)
+	return decals
+}
+
+func getNewJSON() {
+	if err := os.Remove(httpd.JsonCachePath + parkingJSON); err != nil {
+		log.Print(err)
+		return
 	}
+
+	httpd.GetJSONFromURL(parkingLots, parkingJSON)
+	httpd.ValidateGeoJson(parkingJSON)
 }
