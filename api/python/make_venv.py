@@ -9,6 +9,6 @@ if not os.path.exists("python/venv/"):
     os.system("py -m venv python/venv/")
     os.system("py -m ensurepip")
 
-venv_python = "python/venv/Scripts/python.exe"
+venv_python = "python/venv/Scripts/python"
 args = [venv_python, 'python/get_dependencies.py']
 subprocess.run(args)
