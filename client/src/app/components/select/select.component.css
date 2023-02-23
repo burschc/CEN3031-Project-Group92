@@ -2,3 +2,15 @@
     opacity: 0.75;
     font-size: 0.75em;
 }
+
+.selectcontainer {
+   display: flex;
+   justify-content: space-around;
+}
+.wrapper {
+    width: 50%;
+    display: block;
+    margin: 0 auto;
+    border: solid 1px gray;
+    padding: 10px 10px;
+}
