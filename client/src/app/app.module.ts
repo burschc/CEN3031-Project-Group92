@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { MatSelectModule } from '@angular/material/select';
-import {MatButtonModule} from '@angular/material/button';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -23,7 +22,6 @@ import { SelectComponent } from './components/select/select.component';
     LeafletModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatButtonModule,
     MatSelectModule
   ],
   providers: [],
