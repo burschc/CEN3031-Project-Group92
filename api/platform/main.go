@@ -73,7 +73,7 @@ func main() {
 // The python virtual environment is useful for running critical python scripts (like gjf) with no impact or remaining
 // files for the user if they later decide to delete/uninstall the application.
 func SetupPythonVenv() {
-	cmd := exec.Command("py", "python/make_venv.py")
+	cmd := exec.Command("python", "python/make_venv.py")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	log.Print(cmd.Run())

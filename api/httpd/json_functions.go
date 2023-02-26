@@ -29,19 +29,20 @@ const DefaultUpdateTime = "24h"
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // GetJSONFromURL gets a json file from an url and stores it in the local backend cache.
-func GetJSONFromURL(jsonURL string, filename string) {
+func GetJSONFromURL(jsonURL string, filename string) error {
 	//Check that the Json Cache Path exists.
 	if _, err := os.Stat(JsonCachePath); err != nil {
 		log.Print("cache path " + JsonCachePath + " does not exist. Creating...")
 		if err = os.MkdirAll(JsonCachePath, os.ModePerm); err != nil {
 			log.Fatal(err)
+			return err
 		}
 	}
 
 	//Check if the file already exists in the cache.
 	if _, err := os.Stat(JsonCachePath + filename); err == nil {
 		log.Print("file " + filename + " exists in the cache.")
-		return
+		return nil
 	}
 
 	//Attempt to get the json file from the url.
@@ -58,7 +59,7 @@ func GetJSONFromURL(jsonURL string, filename string) {
 	fileType := get.Header.Values("Content-Type")[0]
 	if !strings.Contains(fileType, "application/json") {
 		log.Print("URL " + jsonURL + " does not point to a JSON file")
-		return
+		return err
 	}
 
 	//Create a file in the Json Cache path and copy over the data to it.
@@ -80,6 +81,7 @@ func GetJSONFromURL(jsonURL string, filename string) {
 		log.Print(err)
 	}
 
+	return err
 }
 
 // ConvertToFC searches the json cache for a specified geojson file and returns it in FeatureCollection format.

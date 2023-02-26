@@ -112,11 +112,13 @@ func getDecalTypes() []interface{} {
 }
 
 func getNewJSON() {
+	//Try to see if we can remove the current json file.
 	if err := os.Remove(httpd.JsonCachePath + parkingJSON); err != nil {
 		log.Print(err)
-		return
 	}
 
-	httpd.GetJSONFromURL(parkingLots, parkingJSON)
-	httpd.ValidateGeoJson(parkingJSON)
+	//Try to see if we can grab a new version of the json file. If we can't, we shouldn't try to validate anything.
+	if err := httpd.GetJSONFromURL(parkingLots, parkingJSON); err == nil {
+		httpd.ValidateGeoJson(parkingJSON)
+	}
 }
