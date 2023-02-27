@@ -1,6 +1,9 @@
 package main
 
 import (
+	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
+	"github.com/pkg/browser"
 	"log"
 	"net/http"
 	"os"
@@ -9,35 +12,36 @@ import (
 	"ufpmp/httpd"
 	"ufpmp/httpd/app_handlers"
 	"ufpmp/httpd/app_handlers/decal_filter"
-	"ufpmp/httpd/sprint1"
-
-	"github.com/gorilla/handlers"
-	"github.com/gorilla/mux"
-	"github.com/pkg/browser"
 )
+
+var BackendURL = "localhost:"
+var BackendPort = "8080"
 
 func main() {
 
-	//Create the GorillaMux router and subrouter for general api calls.
+	//Create the GorillaMux router for general api calls.
 	r := mux.NewRouter()
-	api := r.PathPrefix("/api").Subrouter()
+
+	//Use the Custom-made CORS header middleware tied to the logging middleware.
+	//rCustom := handlers.LoggingHandler(os.Stdout, r)
 
 	//Start the logging middleware.
-	rLogged := handlers.LoggingHandler(os.Stdout, r)
+	rCustom := CORSHeaderMiddleware(r)
 
 	//Process any command line arguments.
-	for _, arg := range os.Args[1:] {
+	for i, arg := range os.Args[1:] {
 
 		//Mockup command line option
-		if arg == "-m" {
+		if arg == "-s1" {
 			//Run a command to create a new window using the system's default browser.
-			err := browser.OpenURL("http://localhost:8080/api/sprint1")
+			err := browser.OpenURL(BackendURL + BackendPort + "/api/sprint1")
 			if err != nil {
 				log.Print(err)
 			}
 
 			//Register the URLs associated with the sprint 1 mockup.
-			sprint1.RegisterHandlers(api)
+			//TODO: Fix to also have /api/ in the path.
+			//sprint1.RegisterHandlers(r)
 
 			log.Print("Registered Sprint 1 mockup URLs.")
 		}
@@ -48,18 +52,27 @@ func main() {
 			log.Print("Cleared JSON Cache.")
 		}
 
+		if arg == "-p" {
+			newBackendPort := os.Args[i+2]
+			if newBackendPort != "" {
+				log.Print("Changing port from default " + BackendPort + " to " + newBackendPort)
+				BackendPort = newBackendPort
+			} else {
+				log.Print("Port change flag called but no port was given! Using default port " + BackendPort)
+			}
+		}
+
 	}
 
-	app_handlers.HttpHandlers(api)
-	decal_filter.DecalFilterHandlers(api)
+	RegisterHandlers(r)
 
 	log.Print("Checking Python Virtual Environment...\n\n")
 	SetupPythonVenv()
 
 	//Create a server with the following properties:
 	server := &http.Server{
-		Handler: rLogged,
-		Addr:    "localhost:8080",
+		Handler: rCustom,
+		Addr:    BackendURL + BackendPort,
 
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
@@ -77,4 +90,32 @@ func SetupPythonVenv() {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	log.Print(cmd.Run())
+}
+
+// RegisterHandlers registers all functions for the entire web application. It logs a message confirming that all paths
+// in the function have been registered. Handlers should be registered in an order where the default is registered last.
+func RegisterHandlers(r *mux.Router) {
+	api := r.PathPrefix("/api").Subrouter()
+
+	decal_filter.DecalFilterHandlers(api)
+	app_handlers.HttpHandlers(api)
+
+	app_handlers.DefaultHttpHandler(r)
+}
+
+// CORSHeaderMiddleware prepends a default CORS header that will work pretty much anywhere. For browser security, this
+// really shouldn't be used in production.
+func CORSHeaderMiddleware(r *mux.Router) http.Handler {
+	return handlers.LoggingHandler(os.Stdout, handlers.CORS(
+		handlers.AllowCredentials(),
+		handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization",
+			"DNT", "Keep-Alive", "User-Agent", "X-Requested-With", "If-Modified-Since",
+			"Cache-Control", "Content-Range", "Range"}),
+		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}),
+		handlers.AllowedOrigins([]string{BackendURL + BackendPort, "http://localhost:4200/"}),
+		handlers.ExposedHeaders([]string{"DNT", "Keep-Alive", "User-Agent",
+			"X-Requested-With", "If-Modified-Since", "Cache-Control",
+			"Content-Type", "Content-Range", "Range", "Content-Disposition"}),
+		handlers.MaxAge(86400),
+	)(r))
 }

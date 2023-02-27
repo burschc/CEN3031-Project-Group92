@@ -15,6 +15,10 @@ func HttpHandlers(r *mux.Router) {
 	log.Print("Registered base handlers.")
 }
 
+func DefaultHttpHandler(r *mux.Router) {
+	//r.HandleFunc("/").Handler()
+}
+
 // testHandler returns a json response when going to /api/test
 func testHandler(w http.ResponseWriter, _ *http.Request) {
 	log.Print("LOG!")
@@ -27,4 +31,10 @@ func testHandler(w http.ResponseWriter, _ *http.Request) {
 
 	//Return the JSON data to the caller.
 	_, _ = w.Write(response)
+}
+
+// angularHandler passes along a blank request to angular.
+func angularHandler(r *mux.Router) {
+	r.Use(mux.CORSMethodMiddleware(r))
+
 }

@@ -24,8 +24,8 @@ const decalProperty = "Lot_Class"
 // DecalFilterHandlers registers the functions which deal with the parking decal filters.
 // It logs a message confirming that all paths in the function have been registered.
 func DecalFilterHandlers(r *mux.Router) {
-	r.HandleFunc("/filter/decal/{decal}", findDecalHandler)
-	r.HandleFunc("/filter/decals", decalTypesHandler)
+	r.HandleFunc("/filter/decal/{decal}", findDecalHandler).Methods(http.MethodGet, http.MethodOptions)
+	r.HandleFunc("/filter/decals", decalTypesHandler).Methods(http.MethodGet, http.MethodOptions)
 
 	log.Print("Registered filter handlers.")
 }
