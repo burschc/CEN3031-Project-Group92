@@ -2,3 +2,5 @@ node_modules
 .angular
 .git
 .idea
+api/cache/json/*.json
+api/python/venv/

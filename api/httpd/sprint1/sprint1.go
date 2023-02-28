@@ -5,11 +5,10 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"ufpmp/httpd"
 )
 
 var sprintOneSite = template.Must(template.ParseGlob("frontMockup/*.html"))
-
-const faviconName = "/icons8-map-marker-material-filled-32.ico"
 
 // RegisterHandlers ties the URL path and methods to the correct function.
 func RegisterHandlers(r *mux.Router) {
@@ -24,19 +23,14 @@ func RegisterHandlers(r *mux.Router) {
 	//The most important header code. Handle with extreme caution.
 	r.HandleFunc("/teapot", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusTeapot)
-		_, err := w.Write([]byte("Short and stout"))
-		if err != nil {
-			log.Print(err)
-		}
+		_, _ = w.Write([]byte("Short and stout"))
 	})
 }
 
 // pageLoad loads the mockup of the UF Parking Plus application page made for sprint 1.
 func pageLoad(w http.ResponseWriter, _ *http.Request) {
-
-	err := sprintOneSite.ExecuteTemplate(w, "index.html", nil)
-	if err != nil {
-		log.Fatal(err)
+	if err := sprintOneSite.ExecuteTemplate(w, "index.html", nil); err != nil {
+		httpd.PipeError(w, err)
 	}
 }
 
@@ -44,38 +38,28 @@ func pageLoad(w http.ResponseWriter, _ *http.Request) {
 func searchPostHandler(w http.ResponseWriter, r *http.Request) {
 	log.Print("Not implemented yet!")
 
-	err := r.ParseForm()
-	if err != nil {
-		log.Fatal(err)
+	if err := r.ParseForm(); err != nil {
+		httpd.PipeError(w, err)
 	}
 
 	searchRequest := r.PostForm.Get("map/search")
 
 	log.Print("Received search request for : " + searchRequest)
 
-	//Reload the initial page.
-	//PageLoad(w, r)
-	_, err = w.Write([]byte(searchRequest))
-	if err != nil {
-		log.Print(err)
-	}
+	_, _ = w.Write([]byte(searchRequest))
 }
 
 // filterPostHandler is responsible for processing user input for the filters.
 func filterPostHandler(w http.ResponseWriter, r *http.Request) {
 	log.Print("Not implemented yet!")
 
-	err := r.ParseForm()
-	if err != nil {
-		log.Fatal(err)
+	if err := r.ParseForm(); err != nil {
+		httpd.PipeError(w, err)
 	}
 
 	decal := r.PostForm.Get("filter/pd")
 
 	log.Print("Decal selected was: " + decal)
 
-	_, err = w.Write([]byte(decal))
-	if err != nil {
-		log.Print(err)
-	}
+	_, _ = w.Write([]byte(decal))
 }
