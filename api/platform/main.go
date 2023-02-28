@@ -112,7 +112,7 @@ func CORSHeaderMiddleware(r *mux.Router) http.Handler {
 			"DNT", "Keep-Alive", "User-Agent", "X-Requested-With", "If-Modified-Since",
 			"Cache-Control", "Content-Range", "Range"}),
 		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}),
-		handlers.AllowedOrigins([]string{BackendURL + BackendPort, "http://localhost:4200/"}),
+		handlers.AllowedOrigins([]string{BackendURL + BackendPort, "http://localhost:4200"}),
 		handlers.ExposedHeaders([]string{"DNT", "Keep-Alive", "User-Agent",
 			"X-Requested-With", "If-Modified-Since", "Cache-Control",
 			"Content-Type", "Content-Range", "Range", "Content-Disposition"}),
