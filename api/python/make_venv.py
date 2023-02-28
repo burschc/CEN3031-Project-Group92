@@ -9,8 +9,8 @@ if not os.path.exists("python/venv/"):
     print(f"({file}) Python virtual environment does not exist!")
     print(f"({file}) Making virtual environment...")
     try:
-        subprocess.run("python -m venv python/venv/")
-        subprocess.run("python -m ensurepip")
+        subprocess.run(["python", "-m", "venv", "python/venv/"])
+        subprocess.run(["python", "-m", "ensurepip"])
     except subprocess.CalledProcessError:
         print(f"({file}) Could not make python virtual environment!\n"
               f"Check to make sure python 3 is installed in your system or make sure it is updated.")
