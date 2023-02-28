@@ -4,8 +4,10 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"ufpmp/database"
+	"time"
+	"ufpmp/httpd/app_handler"
 	"ufpmp/httpd/sprint1"
+  "ufpmp/database"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -13,22 +15,45 @@ import (
 )
 
 func main() {
+
 	database.SetupOrOpenBasicDatabase()
 
-	//Run a command to create a new window using the system's default browser.
-	err := browser.OpenURL("http://localhost:8080/sprint1")
-	if err != nil {
-		log.Print(err)
+	//Create the GorillaMux router and subrouter for general api calls.
+	r := mux.NewRouter()
+	api := r.PathPrefix("/api").Subrouter()
+
+	//Start the logging middleware.
+	rLogged := handlers.LoggingHandler(os.Stdout, r)
+
+	//Process any command line arguments.
+	for _, arg := range os.Args[1:] {
+
+		//Mockup command line option
+		if arg == "-m" {
+			//Run a command to create a new window using the system's default browser.
+			err := browser.OpenURL("http://localhost:8080/api/sprint1")
+			if err != nil {
+				log.Print(err)
+			}
+
+			//Register the URLs associated with the sprint 1 mockup.
+			sprint1.RegisterHandlers(api)
+
+			log.Print("Registered Sprint 1 mockup URLs.")
+		}
+
 	}
 
-	//Create the GorillaMux router and register some endpoints for the mockup application.
-	r := mux.NewRouter()
+	app_handler.RegisterHandlers(api)
 
-	r.HandleFunc("/sprint1", sprint1.PageLoad)
-	r.HandleFunc("/map/search", sprint1.SearchPostHandler).Methods("POST")
-	r.HandleFunc("/filter/pd", sprint1.FilterPostHandler).Methods("POST")
+	//Create a server with the following properties:
+	server := &http.Server{
+		Handler: rLogged,
+		Addr:    "localhost:8080",
 
-	//Start the logging middleware and start web server on port 8080.
-	rlogged := handlers.LoggingHandler(os.Stdout, r)
-	log.Fatal(http.ListenAndServe(":8080", rlogged))
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
+	}
+
+	log.Fatal(server.ListenAndServe())
 }
