@@ -7,6 +7,7 @@ import (
 	"time"
 	"ufpmp/httpd/app_handler"
 	"ufpmp/httpd/sprint1"
+  "ufpmp/database"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -14,6 +15,8 @@ import (
 )
 
 func main() {
+
+	database.SetupOrOpenBasicDatabase()
 
 	//Create the GorillaMux router and subrouter for general api calls.
 	r := mux.NewRouter()
