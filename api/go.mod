@@ -11,6 +11,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/paulmach/go.geojson v1.4.0 // indirect
+	github.com/mattn/go-sqlite3 v1.14.16 // indirect
 	github.com/pkg/browser v0.0.0-20210911075715-681adbf594b8 // indirect
 	github.com/yuin/goldmark v1.5.4 // indirect
 	golang.org/x/mod v0.8.0 // indirect

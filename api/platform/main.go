@@ -12,6 +12,13 @@ import (
 	"ufpmp/httpd"
 	"ufpmp/httpd/app_handlers"
 	"ufpmp/httpd/app_handlers/decal_filter"
+	"ufpmp/httpd/app_handler"
+	"ufpmp/httpd/sprint1"
+  "ufpmp/database"
+
+	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
+	"github.com/pkg/browser"
 )
 
 var BackendURL = "localhost:"
@@ -20,6 +27,9 @@ var BackendPort = "8080"
 func main() {
 
 	//Create the GorillaMux router for general api calls.
+	database.SetupOrOpenBasicDatabase()
+
+	//Create the GorillaMux router and subrouter for general api calls.
 	r := mux.NewRouter()
 
 	//Use the Custom-made CORS header middleware tied to the logging middleware.
