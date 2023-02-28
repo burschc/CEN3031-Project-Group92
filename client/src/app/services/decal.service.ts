@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Decal } from '../Decal';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DecalService {
+  private apiUrl = 'http://localhost:8080/api/filter/decals'
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  getDecal() {
-    return this.http.get('http://localhost:8080/api/filter/decals');
-    // return this.http.get('http://localhost:8080/api/filter/decals').toPromise
+  getDecals(): Observable<Decal[]> {
+    return this.http.get<Decal[]>(this.apiUrl)
   }
 }

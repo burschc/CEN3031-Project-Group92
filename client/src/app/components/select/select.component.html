@@ -1,20 +1,21 @@
-
 <div class="wrapper">
   <div class="selectcontainer">
     <mat-form-field appearance="outline">
       <mat-label>Decals</mat-label>
-      <mat-select [formControl]="decalList" multiple>
+      <mat-select [formControl]="decals" multiple>
         <mat-select-trigger>
-          {{decalList.value?.[0] || ''}}
+          {{decals.value?.[0] || ''}}
           <span
-            *ngIf="(decalList.value?.length || 0) > 1"
+            *ngIf="(decals.value?.length || 0) > 1"
             class="additional-selection">
-            (+{{ (decalList.value?.length || 0) - 1 }}
-            {{ decalList.value?.length === 2 ? 'other' :'"others' }})
+            (+{{ (decals.value?.length || 0) - 1 }}
+            {{ decals.value?.length === 2 ? 'other' :'"others' }})
           </span>
         </mat-select-trigger>
-        <mat-option *ngFor="let decal of decalList" [value] = "decal">{{decalList.DecalName}}</mat-option>
+        <mat-option *ngFor="let decal of decalList" [value] = "decal">{{decal}}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
 </div>
+
+

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { DecalService } from 'src/app/services/decal.service';
+import { Decal } from 'src/app/Decal';
 
 @Component({
   selector: 'app-select',
@@ -9,22 +9,12 @@ import { DecalService } from 'src/app/services/decal.service';
   styleUrls: ['./select.component.css']
 })
 export class SelectComponent implements OnInit {
+decals = new FormControl('');
+decalList: Decal[] = [];
 
-decalList: any;
-constructor(private myDecalService: DecalService) {}
+constructor(private decalService: DecalService) {}
 
- ngOnInit(): void { 
-  this.fetchDecals();
-  }
- 
-  private fetchDecals() {
-    this.myDecalService.getDecal().subscribe(response => {
-      this.decalList = response;
-      console.log(this.decalList)
-    });
-  }
-  // decals = new FormControl('');
-
-  // decalList: string[] = ['Brown', 'Brown3', 'Commuter', 'Gated', 'Gold', 'Silver']
-   
+ngOnInit(): void { 
+  this.decalService.getDecals().subscribe((decals) => this.decalList = decals);
+}
 }

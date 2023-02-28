@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { MapComponent } from './components/map/map.component';
 import { HeaderComponent } from './components/header/header.component';
 import { SelectComponent } from './components/select/select.component';
+import { ButtonComponent } from './components/button/button.component';
 
  
 @NgModule({
@@ -18,7 +19,8 @@ import { SelectComponent } from './components/select/select.component';
     AppComponent,
     MapComponent,
     HeaderComponent,
-    SelectComponent
+    SelectComponent,
+    ButtonComponent
   ],
   imports: [
     BrowserModule,
