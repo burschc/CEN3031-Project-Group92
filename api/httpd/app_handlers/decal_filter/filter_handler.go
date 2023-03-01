@@ -102,7 +102,7 @@ func getDecalTypes() []interface{} {
 
 	//Traverse through and find unique decal types using a set.
 	for _, v := range fc.Features {
-		if !set[v.Properties[decalProperty]] {
+		if !set[v.Properties[decalProperty]] && v.Properties[decalProperty] != nil {
 			decals = append(decals, v.Properties[decalProperty])
 			set[v.Properties[decalProperty]] = true
 		}

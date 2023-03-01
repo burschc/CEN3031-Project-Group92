@@ -1,6 +1,7 @@
 package httpd
 
 import (
+	"errors"
 	geojson "github.com/paulmach/go.geojson"
 	"io"
 	"log"
@@ -59,7 +60,7 @@ func GetJSONFromURL(jsonURL string, filename string) error {
 	fileType := get.Header.Values("Content-Type")[0]
 	if !strings.Contains(fileType, "application/json") {
 		log.Print("URL " + jsonURL + " does not point to a JSON file")
-		return err
+		return errors.New("URL " + jsonURL + " does not point to a JSON file")
 	}
 
 	//Create a file in the Json Cache path and copy over the data to it.
