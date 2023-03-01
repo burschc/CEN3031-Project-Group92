@@ -1,9 +1,6 @@
 package main
 
 import (
-	"github.com/gorilla/handlers"
-	"github.com/gorilla/mux"
-	"github.com/pkg/browser"
 	"log"
 	"net/http"
 	"os"
@@ -13,6 +10,10 @@ import (
 	"ufpmp/httpd"
 	"ufpmp/httpd/app_handlers"
 	"ufpmp/httpd/app_handlers/decal_filter"
+
+	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
+	"github.com/pkg/browser"
 )
 
 var BackendURL = "localhost:"
@@ -38,7 +39,7 @@ func main() {
 		//Mockup command line option
 		if arg == "-s1" {
 			//Run a command to create a new window using the system's default browser.
-			err := browser.OpenURL(BackendURL + BackendPort + "/api/sprint1")
+			err := browser.OpenURL("http://" + BackendURL + BackendPort + "/api/sprint1")
 			if err != nil {
 				log.Print(err)
 			}
