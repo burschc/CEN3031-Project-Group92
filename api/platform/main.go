@@ -21,7 +21,7 @@ var BackendPort = "8080"
 
 func main() {
 
-	//Create the GorillaMux router for general api calls.
+	//Setup the database, or open it if it already exists.
 	database.SetupOrOpenBasicDatabase()
 
 	//Create the GorillaMux router and subrouter for general api calls.
