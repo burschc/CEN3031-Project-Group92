@@ -1,9 +1,6 @@
 package main
 
 import (
-	"github.com/gorilla/handlers"
-	"github.com/gorilla/mux"
-	"github.com/pkg/browser"
 	"log"
 	"net/http"
 	"os"
@@ -13,6 +10,10 @@ import (
 	"ufpmp/httpd"
 	"ufpmp/httpd/app_handlers"
 	"ufpmp/httpd/app_handlers/decal_filter"
+
+	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
+	"github.com/pkg/browser"
 )
 
 var BackendURL = "localhost:"
@@ -20,7 +21,7 @@ var BackendPort = "8080"
 
 func main() {
 
-	//Create the GorillaMux router for general api calls.
+	//Setup the database, or open it if it already exists.
 	database.SetupOrOpenBasicDatabase()
 
 	//Create the GorillaMux router and subrouter for general api calls.
