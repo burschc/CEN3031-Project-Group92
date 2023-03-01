@@ -9,16 +9,10 @@ import (
 	"os"
 	"os/exec"
 	"time"
+	"ufpmp/database"
 	"ufpmp/httpd"
 	"ufpmp/httpd/app_handlers"
 	"ufpmp/httpd/app_handlers/decal_filter"
-	"ufpmp/httpd/app_handler"
-	"ufpmp/httpd/sprint1"
-  "ufpmp/database"
-
-	"github.com/gorilla/handlers"
-	"github.com/gorilla/mux"
-	"github.com/pkg/browser"
 )
 
 var BackendURL = "localhost:"
