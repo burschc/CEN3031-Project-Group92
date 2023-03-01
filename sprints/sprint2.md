@@ -6,10 +6,11 @@
 
 ## Work Completed this Sprint
 
-### [Issue 4: Filter based on parking pass type](https://github.com/burschc/CEN3031-Project-Group92/issues/4)
-This allows for users enter a given parking pass type and then be shown only the parking areas that are relevant to them.
 ### [Issue 10: Setup database](https://github.com/burschc/CEN3031-Project-Group92/issues/10)
 This will allow us to setup a login system which will let users sign in and store their parking pass for future usage of the site, and eventually pin parking areas they prefer to use.
+
+### Notable Progress on [Issue 4: Filter based on parking pass type](https://github.com/burschc/CEN3031-Project-Group92/issues/4)
+This allows for users enter a given parking pass type and then be shown only the parking areas that are relevant to them. 
 
 ## Unit Tests for Front End
 
