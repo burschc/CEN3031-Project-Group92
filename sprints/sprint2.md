@@ -2,8 +2,8 @@
 
 ## Relevant Links
 
-- [Part 1](https://youtu.be/yfqtvqKxE_s)
-- [Part 2](link)
+- [Part 1](https://www.youtube.com/watch?v=C0rkzj315cw)
+- [Part 2](https://www.youtube.com/watch?v=QRacD4MSXI4)
 
 ## Work Completed this Sprint
 
