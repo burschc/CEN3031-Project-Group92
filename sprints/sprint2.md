@@ -2,8 +2,8 @@
 
 ## Relevant Links
 
-- [Video](link)
-- [Video](link)
+- [Part 1](https://youtu.be/yfqtvqKxE_s)
+- [Part 2](link)
 
 ## Work Completed this Sprint
 
