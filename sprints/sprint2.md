@@ -14,6 +14,7 @@ This makes it possible for the program to cache json files that are commonly use
 
 ### Notable Progress on [Issue 4: Filter based on parking pass type](https://github.com/burschc/CEN3031-Project-Group92/issues/4)
 This allows for users enter a given parking pass type and then be shown only the parking areas that are relevant to them. 
+So far, there are handlers which list all the parking decals, and handlers which filter the json parking lot file for specific decals a user would be searching for. It additionally has required backend supporting functions to allow this to work.
 
 ## Unit Tests for Front End
 
