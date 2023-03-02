@@ -17,7 +17,11 @@ This allows for users enter a given parking pass type and then be shown only the
 So far, there are handlers which list all the parking decals, and handlers which filter the json parking lot file for specific decals a user would be searching for. It additionally has required backend supporting functions to allow this to work.
 
 ## Unit Tests for Front End
-
+- it 'should create the app': Simple test which just ensures the app is properly created.
+- it 'should have as title 'UFParkingMap'': Ensures the app title is UFParkingMap.
+- it 'should render title': Checks to see if the app is running.
+- it 'should be created': This checks to see if the DecalService is properly created.
+- it 'should create': This checks if the ButtonComponent was properly made. There is another test with the same name also testing to check if the SelectComponent is made, another for the HeaderComponent, and another for the MapComponent. 
 
 ## Cypress Tests
 - Test 1 just visits the default page (currently localhost:4200).
