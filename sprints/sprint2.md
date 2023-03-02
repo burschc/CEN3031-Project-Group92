@@ -17,7 +17,10 @@ This allows for users enter a given parking pass type and then be shown only the
 
 ## Unit Tests for Front End
 
+
 ## Cypress Tests
+- Test 1 just visits the default page (currently localhost:4200).
+- Test 2 attempts to open the decal drop down box. 
 
 ## Backend Tests
 - TestGitHubJSON: Pulls a json file from the api on Github. Checks for json content and verifies that the file was downloaded properly. It then cleans up by deleting the file from the cache.
@@ -29,6 +32,6 @@ This allows for users enter a given parking pass type and then be shown only the
 - cleanup: Simply cleans the cache.
 
 ## Documentation
-- "/api/filter/decal/{decal}": Displays a specific decal, represented in the URL via {decal}
-- "/api/filter/decals": Displays all decals. 
-- "/api/test": Base handler.
+- "/api/filter/decal/{decal}": Returns a specific decal, represented in the URL via {decal} (ex. Red One} or "/api/filter/decal/any" which returns all of them
+- "/api/filter/decals": Returns a list of all parking types.
+- "/api/test": Base handler. Returns "Hello" and "World"
