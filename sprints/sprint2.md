@@ -3,6 +3,7 @@
 ## Relevant Links
 
 - [Video](link)
+- [Video](link)
 
 ## Work Completed this Sprint
 
@@ -24,8 +25,7 @@ So far, there are handlers which list all the parking decals, and handlers which
 - it 'should create': This checks if the ButtonComponent was properly made. There is another test with the same name also testing to check if the SelectComponent is made, another for the HeaderComponent, and another for the MapComponent. 
 
 ## Cypress Tests
-- Test 1 just visits the default page (currently localhost:4200).
-- Test 2 attempts to filter out the decals. It first selects the dropdown menu, then Cypress selects one of the checkboxes via the click method. After that, it verifies that the content labeled next to the checkbox is the 'Orange' decal.
+- Test 1 just visits the default page (currently localhost:4200), and attempts to open the dropdown menu and check the Orange option box, ensuring it the positioning matches what was expected.
 
 ## Backend Tests
 - TestGitHubJSON: Pulls a json file from the api on Github. Checks for json content and verifies that the file was downloaded properly. It then cleans up by deleting the file from the cache.
