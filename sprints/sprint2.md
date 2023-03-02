@@ -9,6 +9,9 @@
 ### [Issue 10: Setup database](https://github.com/burschc/CEN3031-Project-Group92/issues/10)
 This will allow us to setup a login system which will let users sign in and store their parking pass for future usage of the site, and eventually pin parking areas they prefer to use.
 
+### [Issue 12: Implement caching of application json files](https://github.com/burschc/CEN3031-Project-Group92/issues/12)
+This makes it possible for the program to cache json files that are commonly used, with it checking for updates on a given schedule, if internet access is available.
+
 ### Notable Progress on [Issue 4: Filter based on parking pass type](https://github.com/burschc/CEN3031-Project-Group92/issues/4)
 This allows for users enter a given parking pass type and then be shown only the parking areas that are relevant to them. 
 
@@ -26,4 +29,6 @@ This allows for users enter a given parking pass type and then be shown only the
 - cleanup: Simply cleans the cache.
 
 ## Documentation
-
+- "/api/filter/decal/{decal}": Displays a specific decal, represented in the URL via {decal}
+- "/api/filter/decals": Displays all decals. 
+- "/api/test": Base handler.
