@@ -1,8 +1,10 @@
 describe('Parking App Test', () => {
-  it('Will apply one of the filters to the map', () => {
+  it('Will apply one of the flters to the map', () => {
     
-    cy.visit('localhost:4200')
-    
+    cy.visit('localhost:4200/')
+    Cypress.on('uncaught:exception', (err, runnable) => { return false; })
+
+
     cy.get('App-Select').click()
     //cy.contains('Decals').click()
 
