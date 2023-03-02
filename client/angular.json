@@ -64,10 +64,12 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options":{
+            "proxyConfig" : "proxy.config.json"
+          },
           "configurations": {
             "production": {
-              "browserTarget": "UFParkingMap:build:production",
-              "proxyConfig": "proxy.config.json"
+              "browserTarget": "UFParkingMap:build:production"
             },
             "development": {
               "browserTarget": "UFParkingMap:build:development"
@@ -103,7 +105,8 @@
         "cypress-run": {
           "builder": "@cypress/schematic:cypress",
           "options": {
-            "devServerTarget": "UFParkingMap:serve"
+            "devServerTarget": "UFParkingMap:serve",
+            "proxyConfig" : "proxy.config.json"
           },
           "configurations": {
             "production": {
@@ -123,7 +126,8 @@
           "options": {
             "devServerTarget": "UFParkingMap:serve",
             "watch": true,
-            "headless": false
+            "headless": false,
+            "proxyConfig" : "proxy.config.json"
           },
           "configurations": {
             "production": {

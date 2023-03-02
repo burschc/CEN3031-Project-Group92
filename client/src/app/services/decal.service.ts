@@ -7,7 +7,7 @@ import { Decal } from '../Decal';
   providedIn: 'root'
 })
 export class DecalService {
-  private apiUrl = 'http://localhost:8080/api/filter/decals'
+  private apiUrl = 'http://localhost:4200/api/filter/decals'
 
   constructor(private http: HttpClient) {}
 
