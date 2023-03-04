@@ -85,8 +85,8 @@ func GetJSONFromURL(jsonURL string, filename string) error {
 	return err
 }
 
-// ConvertToFC searches the json cache for a specified geojson file and returns it in FeatureCollection format.
-func ConvertToFC(filename string) *geojson.FeatureCollection {
+// FileToFC searches the json cache for a specified geojson file and returns it in FeatureCollection format.
+func FileToFC(filename string) *geojson.FeatureCollection {
 	data := geojson.NewFeatureCollection()
 
 	//If the file does not exist, return a blank feature collection.
@@ -110,6 +110,26 @@ func ConvertToFC(filename string) *geojson.FeatureCollection {
 	}
 
 	return data
+}
+
+// FCToFile saves a feature collection to a file in the json cache.
+func FCToFile(filename string, fc *geojson.FeatureCollection) error {
+	//Detect if a file with the given name exists.
+	if _, err := os.Stat(filename); err == nil {
+		log.Print("File " + filename + " exists! Overwriting file with new feature collection...")
+	}
+
+	//Marhsall the JSON to a byte array and overwrite the json file with it.
+	data, err := fc.MarshalJSON()
+	if err != nil {
+		return err
+	}
+
+	if err = os.WriteFile(JsonCachePath+filename, data, os.ModePerm); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // ValidateGeoJson will run gjf (a python script) on the target geojson file to fix any issues it may have.

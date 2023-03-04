@@ -149,7 +149,7 @@ func TestLotsFC(t *testing.T) {
 	})
 
 	t.Run("Should be able to create a feature collection with some amount of elements", func(t *testing.T) {
-		fc := ConvertToFC(filename)
+		fc := FileToFC(filename)
 
 		if len(fc.Features) == 0 {
 			t.Fatalf("Number of features is 0 when it shouldn't!")
@@ -169,7 +169,7 @@ func TestLotsFCNoExist(t *testing.T) {
 	})
 
 	t.Run("Should be blank FeatureCollection", func(t *testing.T) {
-		fc := ConvertToFC(filename)
+		fc := FileToFC(filename)
 
 		if len(fc.Features) > 0 {
 			t.Fatalf("FeatureCollection has features when it should be blank!")

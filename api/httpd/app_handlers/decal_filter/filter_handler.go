@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"ufpmp/httpd"
 )
 
@@ -20,6 +21,15 @@ const parkingJSON = "parking_lots.json"
 
 // decalProperty is the title of the feature property which houses the decal for the lot.
 const decalProperty = "Lot_Class"
+
+var propertyNameReplacements = map[string]string{
+	"ADXR":        "All Decals (No Red)",
+	"Visitor 30M": "Visitor (30 Minute Limit)",
+	"Brown 3 XOB": "Brown 3 (No Official Business)",
+	"Med Res":     "Medical Resident",
+	"Any Decal*":  "All Decals (No Park and Ride)",
+	"Service XOB": "Service (No Official Business)",
+}
 
 // DecalFilterHandlers registers the functions which deal with the parking decal filters.
 // It logs a message confirming that all paths in the function have been registered.
@@ -69,7 +79,7 @@ func findDecal(decal string) *geojson.FeatureCollection {
 	filteredLots := geojson.NewFeatureCollection()
 
 	//Open the json file as a feature collection and return that feature collection.
-	fc := httpd.ConvertToFC(parkingJSON)
+	fc := httpd.FileToFC(parkingJSON)
 
 	//If the decal is 'any' return the full feature collection.
 	if decal == "any" {
@@ -98,7 +108,7 @@ func getDecalTypes() []interface{} {
 	var decals []interface{}
 
 	//Unmarshall the file into a feature collection we can traverse.
-	fc := httpd.ConvertToFC(parkingJSON)
+	fc := httpd.FileToFC(parkingJSON)
 
 	//Traverse through and find unique decal types using a set.
 	for _, v := range fc.Features {
@@ -120,5 +130,33 @@ func getNewJSON() {
 	//Try to see if we can grab a new version of the json file. If we can't, we shouldn't try to validate anything.
 	if err := httpd.GetJSONFromURL(parkingLots, parkingJSON); err == nil {
 		httpd.ValidateGeoJson(parkingJSON)
+		replaceLotClass()
+	}
+}
+
+// replaceLotClass replaces obfuscated lot_class values for their actual equivalents.
+func replaceLotClass() {
+	log.Print("Trying to replace bad lot class names with redefined ones...")
+	//Unmarshall the file into a feature collection we can traverse.
+	fc := httpd.FileToFC(parkingJSON)
+
+	//Traverse through and replace any lot classes that match the replacement map key with its corresponding value.
+	for i, v := range fc.Features {
+		lotClass, err := v.PropertyString(decalProperty)
+		if err != nil {
+			log.Print("(Feature # " + strconv.Itoa(i) + ") " + err.Error())
+			continue
+		}
+
+		n, ok := propertyNameReplacements[lotClass]
+		if !ok {
+			continue
+		}
+
+		v.Properties[decalProperty] = n
+	}
+
+	if err := httpd.FCToFile(parkingJSON, fc); err != nil {
+		log.Print(err.Error())
 	}
 }
