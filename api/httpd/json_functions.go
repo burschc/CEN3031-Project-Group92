@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 )
@@ -137,8 +138,21 @@ func ValidateGeoJson(filename string) {
 
 	//Validate the file using gjf (overwrite flag crashes the program when executing from golang).
 	log.Print("Calling gjf on " + filename)
-	cmd := exec.Command(PythonVenv+"Scripts/gjf", JsonCachePath+filename)
-	log.Print(cmd.Run())
+
+	osName := runtime.GOOS
+
+	if osName == "windows" {
+		log.Print("Running gjf as a Windows venv Python script file.")
+		cmd := exec.Command(PythonVenv+"Scripts/gjf", JsonCachePath+filename)
+		log.Print(cmd.Run())
+	} else if (osName == "darwin") || (osName == "linux") {
+		log.Print("Running gjf as a Linux/Darwin venv Python script file.")
+		cmd := exec.Command(PythonVenv+"bin/gjf", JsonCachePath+filename)
+		log.Print(cmd.Run())
+	} else {
+		log.Print("Unsupported OS for venv Python script. The JSON File will NOT be fixed.")
+		return
+	}
 
 	//If there is a fixed version of the file, replace the old version with the fixed version.
 	if _, err := os.Stat(JsonCachePath + filename); err == nil {
