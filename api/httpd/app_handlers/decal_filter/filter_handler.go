@@ -22,6 +22,8 @@ const parkingJSON = "parking_lots.json"
 // decalProperty is the title of the feature property which houses the decal for the lot.
 const decalProperty = "Lot_Class"
 
+// propertyNameReplacements is a dictionary containing decal names that aren't clear and their equivalents in plain
+// english. This is used to replace these unclear names in the parking json.
 var propertyNameReplacements = map[string]string{
 	"ADXR":        "All Decals (No Red)",
 	"Visitor 30M": "Visitor (30 Minute Limit)",

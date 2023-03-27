@@ -32,6 +32,8 @@ const DefaultUpdateTime = "24h"
 
 // GetJSONFromURL gets a json file from an url and stores it in the local backend cache.
 func GetJSONFromURL(jsonURL string, filename string) error {
+	log.Printf("Acquiring JSON file %v from %v...", filename, jsonURL)
+
 	//Check that the Json Cache Path exists.
 	if _, err := os.Stat(JsonCachePath); err != nil {
 		log.Print("cache path " + JsonCachePath + " does not exist. Creating...")
