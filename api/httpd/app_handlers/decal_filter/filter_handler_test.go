@@ -31,9 +31,9 @@ func init() {
 // TestDecalTypesPresent will test the Decal Types handler using decals that exist in
 // "https://campusmap.ufl.edu/assets/parking_polys.json". The result should be a json list containing the given number
 // of elements.
-func TestDecalTypesHandler(t *testing.T) {
+func TestDecalDevTypesHandler(t *testing.T) {
 	const numExpected = 24 //Can be easily changed by the author of the JSON file we are using.
-	const endpoint = "/api/filter/decals"
+	const endpoint = "/api/filter/dev/decals"
 
 	var res *http.Response
 
@@ -121,8 +121,8 @@ func TestFindDecalHandlerPresent(t *testing.T) {
 		}
 	})
 
-	t.Run("Should Find Decal All Decals (No Park and Ride).", func(t *testing.T) {
-		const decalInput = "All%20Decals%20(No%20Park%20and%20Ride)"
+	t.Run("Should Find Decal Disabled Student.", func(t *testing.T) {
+		const decalInput = "Disabled%20Student"
 
 		//Create the request and recorder and pass them to the created Gorilla Mux.
 		request := httptest.NewRequest(http.MethodGet, "/api/filter/decal/"+decalInput, nil)
@@ -163,8 +163,8 @@ func TestFindDecalHandlerPresent(t *testing.T) {
 // return a blank feature collection. Note that URLs containing spaces must have spaces replaced with %20 for the tests
 // to work.
 func TestFindDecalHandlerAbsent(t *testing.T) {
-	t.Run("Should NOT Find Decal ADXR.", func(t *testing.T) {
-		const decalInput = "ADXR"
+	t.Run("Should NOT Find Decal Decal All Decals (No Park and Ride).", func(t *testing.T) {
+		const decalInput = "All%20Decals%20(No%20Park%20and%20Ride"
 
 		//Create the request and recorder and pass them to the created Gorilla Mux.
 		request := httptest.NewRequest(http.MethodGet, "/api/filter/decal/"+decalInput, nil)
