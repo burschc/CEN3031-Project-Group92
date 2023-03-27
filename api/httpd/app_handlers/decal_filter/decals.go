@@ -277,6 +277,10 @@ var ParkingDecals = map[string]Decal{
 	},
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//													STRUCTURES												  		  //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // Decal is the basic structure of a decal entry that is connected to the mapped decals through the ParkingOptions object.
 type Decal struct {
 	ParkingOptions []string             // ParkingOptions are the JSON property names that this decal can park in.

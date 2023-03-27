@@ -1,80 +1,57 @@
 package main
 
 import (
-	"github.com/pkg/browser"
+	"context"
 	"log"
+	"net/http"
 	"os"
-	"os/exec"
+	"os/signal"
 	"ufpmp/database"
-	"ufpmp/httpd"
 	"ufpmp/httpd/mux_functions"
+	"ufpmp/platform/arguments"
+	"ufpmp/python"
 )
 
-// BackendPort is the default backend port for the web app.
-var BackendPort = "8080"
-
 func main() {
+
+	//Process any command line arguments.
+	arguments.ProcessArguments()
 
 	//Set up the database, or open it if it already exists.
 	database.SetupOrOpenBasicDatabase()
 
-	//Process any command line arguments.
-	for i, arg := range os.Args[1:] {
-
-		//Mockup command line option
-		if arg == "-s1" {
-			//Run a command to create a new window using the system's default browser.
-			err := browser.OpenURL("http://localhost:" + BackendPort + "/api/sprint1")
-			if err != nil {
-				log.Print(err)
-			}
-
-			//Register the URLs associated with the sprint 1 mockup.
-			//TODO: Fix to also have /api/ in the path.
-			//sprint1.RegisterHandlers(r)
-
-			log.Print("Registered Sprint 1 mockup URLs.")
-		}
-
-		//Clear the cache
-		if arg == "-cc" {
-			httpd.ClearJSONCache()
-			log.Print("Cleared JSON Cache.")
-		}
-
-		if arg == "-p" {
-			newBackendPort := os.Args[i+2]
-			if newBackendPort != "" {
-				log.Print("Changing port from default " + BackendPort + " to " + newBackendPort)
-				BackendPort = newBackendPort
-			} else {
-				log.Print("Port change flag called but no port was given! Using default port " + BackendPort)
-			}
-		}
-
-	}
-
-	//Make sure Python is installed and the virtual enviornment with all the required scripts is available.
+	//Make sure Python is installed and the virtual environment with all the required scripts is available.
 	log.Print("Checking Python Virtual Environment...\n\n")
-	SetupPythonVenv()
+	python.SetupPythonVenv()
 
 	//Create the router and server for the web app and register the handlers for the mux_functions.
-	r, server := mux_functions.CreateAppServer(mux_functions.AppServerProperties{
-		BackendURL:  "localhost",
-		BackendPort: ":" + BackendPort,
-	})
-	mux_functions.RegisterHandlers(r)
+	mux_functions.CreateAppServer(mux_functions.ServerProperties)
+	mux_functions.RegisterHandlers(mux_functions.ServerProperties.Router)
 
-	log.Print("Started http server accessible through " + server.Addr)
-	log.Fatal(server.ListenAndServe())
+	log.Printf("Starting http server accessible through %v...", mux_functions.ServerProperties.Server.Addr)
+
+	go func() {
+		if err := mux_functions.ServerProperties.Server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Printf("Server encountered an error:\n%v", err.Error())
+		}
+	}()
+
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	<-c
+
+	ServerShutdown()
+	os.Exit(0)
 }
 
-// SetupPythonVenv runs a python script which checks if the virtual environment exists and creates it if it doesn't.
-// The python virtual environment is useful for running critical python scripts (like gjf) with no impact or remaining
-// files for the user if they later decide to delete/uninstall the application.
-func SetupPythonVenv() {
-	cmd := exec.Command("python", "python/make_venv.py")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	log.Print(cmd.Run())
+func ServerShutdown() {
+	log.Print("Shutting down server...")
+	ctx, cancel := context.WithTimeout(context.Background(), arguments.GracefulWait)
+	defer cancel()
+
+	if err := mux_functions.ServerProperties.Server.Shutdown(ctx); err != nil {
+		log.Fatal(err.Error())
+	}
+
+	log.Print("Server has shut down successfully.")
 }
