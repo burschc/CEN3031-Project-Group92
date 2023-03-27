@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 )
@@ -31,6 +32,8 @@ const DefaultUpdateTime = "24h"
 
 // GetJSONFromURL gets a json file from an url and stores it in the local backend cache.
 func GetJSONFromURL(jsonURL string, filename string) error {
+	log.Printf("Acquiring JSON file %v from %v...", filename, jsonURL)
+
 	//Check that the Json Cache Path exists.
 	if _, err := os.Stat(JsonCachePath); err != nil {
 		log.Print("cache path " + JsonCachePath + " does not exist. Creating...")
@@ -85,8 +88,8 @@ func GetJSONFromURL(jsonURL string, filename string) error {
 	return err
 }
 
-// ConvertToFC searches the json cache for a specified geojson file and returns it in FeatureCollection format.
-func ConvertToFC(filename string) *geojson.FeatureCollection {
+// FileToFC searches the json cache for a specified geojson file and returns it in FeatureCollection format.
+func FileToFC(filename string) *geojson.FeatureCollection {
 	data := geojson.NewFeatureCollection()
 
 	//If the file does not exist, return a blank feature collection.
@@ -112,13 +115,46 @@ func ConvertToFC(filename string) *geojson.FeatureCollection {
 	return data
 }
 
+// FCToFile saves a feature collection to a file in the json cache.
+func FCToFile(filename string, fc *geojson.FeatureCollection) error {
+	//Detect if a file with the given name exists.
+	if _, err := os.Stat(filename); err == nil {
+		log.Print("File " + filename + " exists! Overwriting file with new feature collection...")
+	}
+
+	//Marhsall the JSON to a byte array and overwrite the json file with it.
+	data, err := fc.MarshalJSON()
+	if err != nil {
+		return err
+	}
+
+	if err = os.WriteFile(JsonCachePath+filename, data, os.ModePerm); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // ValidateGeoJson will run gjf (a python script) on the target geojson file to fix any issues it may have.
 func ValidateGeoJson(filename string) {
 
 	//Validate the file using gjf (overwrite flag crashes the program when executing from golang).
 	log.Print("Calling gjf on " + filename)
-	cmd := exec.Command(PythonVenv+"Scripts/gjf", JsonCachePath+filename)
-	log.Print(cmd.Run())
+
+	osName := runtime.GOOS
+
+	if osName == "windows" {
+		log.Print("Running gjf as a Windows venv Python script file.")
+		cmd := exec.Command(PythonVenv+"Scripts/gjf", JsonCachePath+filename)
+		log.Print(cmd.Run())
+	} else if (osName == "darwin") || (osName == "linux") {
+		log.Print("Running gjf as a Linux/Darwin venv Python script file.")
+		cmd := exec.Command(PythonVenv+"bin/gjf", JsonCachePath+filename)
+		log.Print(cmd.Run())
+	} else {
+		log.Print("Unsupported OS for venv Python script. The JSON File will NOT be fixed.")
+		return
+	}
 
 	//If there is a fixed version of the file, replace the old version with the fixed version.
 	if _, err := os.Stat(JsonCachePath + filename); err == nil {

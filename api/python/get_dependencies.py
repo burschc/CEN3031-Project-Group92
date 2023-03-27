@@ -23,13 +23,13 @@ print(f"({file}) Checking Python dependencies for UF Parking Map Plus...")
 
 dependencies = ["gjf"]
 
-subprocess.run([py, "-m", "pip", "install", "--upgrade", "pip"])
+subprocess.run([py, "-m", "pip", "install", "--upgrade", "--quiet", "pip"])
 
 for dep in dependencies:
     if dep in sys.modules:
         print(f"({file}) {dep} is already in the virtual environment. Checking for updates...")
-        subprocess.run([pip, "--upgrade", dep])
+        subprocess.run([pip, "--upgrade --quiet", dep])
     else:
-        subprocess.run([pip, "install", dep])
+        subprocess.run([pip, "install", "--quiet", dep])
 
 print(f"({file}) All dependencies were verified or installed.\n")
