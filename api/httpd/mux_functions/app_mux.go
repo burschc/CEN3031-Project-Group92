@@ -1,11 +1,14 @@
 package mux_functions
 
 import (
-	"github.com/gorilla/handlers"
-	"github.com/gorilla/mux"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
+
+	"ufpmp/database"
 	"ufpmp/httpd/app_handlers"
 	"ufpmp/httpd/app_handlers/decal_filter"
 )
@@ -77,6 +80,7 @@ func RegisterHandlers(r *mux.Router) {
 
 	decal_filter.DecalFilterHandlers(api)
 	app_handlers.HttpHandlers(api)
+	database.DatabaseHandlers(api)
 
 	for _, f := range ServerProperties.ContingentRoutes {
 		f(api)
