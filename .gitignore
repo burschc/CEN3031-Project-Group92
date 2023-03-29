@@ -4,3 +4,4 @@ node_modules
 .idea
 api/cache/json/*.json
 api/python/venv/
+api/*.db

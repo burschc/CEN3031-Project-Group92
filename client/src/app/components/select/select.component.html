@@ -1,9 +1,8 @@
-<div class="wrapper">
   <div class="selectcontainer">
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" id="select-form">
       <mat-label>Decals</mat-label>
-      <mat-select [formControl]="decals" multiple>
-        <mat-select-trigger>
+      <mat-select id= "select-decal" [formControl]="decals"  [(ngModel)]="decalSelected" (ngModelChange)="onSelected()">
+        <!-- <mat-select-trigger>
           {{decals.value?.[0] || ''}}
           <span
             *ngIf="(decals.value?.length || 0) > 1"
@@ -11,11 +10,9 @@
             (+{{ (decals.value?.length || 0) - 1 }}
             {{ decals.value?.length === 2 ? 'other' :'"others' }})
           </span>
-        </mat-select-trigger>
+        </mat-select-trigger> -->
         <mat-option *ngFor="let decal of decalList" [value] = "decal">{{decal}}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
-</div>
-
 

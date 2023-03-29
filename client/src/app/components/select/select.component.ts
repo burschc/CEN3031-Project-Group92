@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { DecalService } from 'src/app/services/decal.service';
+import { DecalService } from '../../services/decal.service';
 import { Decal } from 'src/app/Decal';
 
 @Component({
@@ -9,12 +9,19 @@ import { Decal } from 'src/app/Decal';
   styleUrls: ['./select.component.css']
 })
 export class SelectComponent implements OnInit {
-decals = new FormControl('');
-decalList: Decal[] = [];
+  decals = new FormControl('');
+  decalList: Decal[] = [];
+  decalSelected!: string;
+  @Output() decalEvent = new EventEmitter<string>();
+  
+  constructor(private data: DecalService) {}
 
-constructor(private decalService: DecalService) {}
+  ngOnInit(): void { 
+    this.data.getDecals().subscribe(decals => this.decalList = decals);
+  }
 
-ngOnInit(): void { 
-  this.decalService.getDecals().subscribe((decals) => this.decalList = decals);
-}
+  onSelected() {
+    this.decalEvent.emit(this.decalSelected);
+  }
+
 }
