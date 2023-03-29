@@ -20,8 +20,7 @@ This sets up a basic login system using bcrypt which will securely store usernam
 - it 'should create': This checks if the ButtonComponent was properly made. There is another test with the same name also testing to check if the SelectComponent is made, another for the HeaderComponent, and another for the MapComponent. 
 
 ## Cypress Tests
-- Test 1 visits the default page (currently localhost:4200), and attempts to open the dropdown menu and check the Orange option box, ensuring it the positioning matches what was expected.
-- Test 2  visits the default page (currently localhost:4200), and attempts to open the dropdown menu and check the Brown 2 option box, ensuring it the positioning matches what was expected.
+- Dropdowns.cy.js visits the default page (currently localhost:4200), and attempts to open the dropdown menu and check a random parking type option box, ensuring it the positioning matches what was that type should be.
 
 ## Backend Tests
 - TestGitHubJSON: Pulls a json file from the api on Github. Checks for json content and verifies that the file was downloaded properly. It then cleans up by deleting the file from the cache.
