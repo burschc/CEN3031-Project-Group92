@@ -30,6 +30,7 @@
               }
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -63,6 +64,9 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options":{
+            "proxyConfig" : "proxy.config.json"
+          },
           "configurations": {
             "production": {
               "browserTarget": "UFParkingMap:build:production"
@@ -97,11 +101,48 @@
             ],
             "scripts": []
           }
+        },
+        "cypress-run": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "UFParkingMap:serve",
+            "proxyConfig" : "proxy.config.json"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "UFParkingMap:serve:production"
+            }
+          }
+        },
+        "cypress-open": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "watch": true,
+            "headless": false
+          }
+        },
+        "e2e": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "UFParkingMap:serve",
+            "watch": true,
+            "headless": false,
+            "proxyConfig" : "proxy.config.json"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "UFParkingMap:serve:production"
+            }
+          }
         }
       }
     }
   },
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "schematicCollections": [
+      "@cypress/schematic",
+      "@schematics/angular"
+    ]
   }
 }

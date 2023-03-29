@@ -12,4 +12,8 @@ export class HeaderComponent {
   
   ngOnInit(): void { 
   }
+
+  toggleGetDecal() {
+    console.log('toggle');
+  }
 }

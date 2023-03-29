@@ -1,0 +1,99 @@
+<br>
+<h1>Account <mat-icon>account_circle</mat-icon></h1>
+
+<mat-accordion #signin_form>
+    <mat-expansion-panel hideToggle>    
+    
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Returning user? Sign in here
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <mat-form-field appearance="fill"
+            [hideRequiredMarker]="hideRequiredControl.value"
+            [floatLabel]="getFloatLabelValue()">
+            <input matInput placeholder="username" required>
+            <br>
+            <input matInput placeholder="password" required>
+            <br>
+            <button mat-stroked-button> Sign In</button>
+        </mat-form-field>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Otherwise, create an account
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-form-field appearance="fill"
+        [hideRequiredMarker]="hideRequiredControl.value"
+        [floatLabel]="getFloatLabelValue()">
+        <input matInput placeholder="First name" required>
+        <br>
+        <input matInput placeholder="Last name" required>
+        <br>
+        <input matInput placeholder="Email address" required>
+        <br>
+        <input matInput placeholder="Create username" required>
+        <br>
+        <input matInput placeholder="Create password" required>
+
+        <button mat-stroked-button> Sign Up</button>
+
+    </mat-form-field>
+    </mat-expansion-panel>
+</mat-accordion>
+<!--
+    <div class="signin"> Returning user? Sign in
+    <a href=#signin_form> here</a>
+    </div>
+    
+    
+    <div class="signin-form">
+    <mat-form-field appearance="fill"
+        [hideRequiredMarker]="hideRequiredControl.value"
+        [floatLabel]="getFloatLabelValue()">
+      <input matInput placeholder="username" required>
+      <br>
+      <input matInput placeholder="password" required>
+
+      <button mat-stroked-button> Sign In</button>
+    </mat-form-field>
+</div> 
+
+
+<div class="signup"> Otherwise, 
+    <a href="signup-form" target="_self">create an account</a>
+</div>
+
+<div class="signup-form">
+    <mat-form-field appearance="fill"
+        [hideRequiredMarker]="hideRequiredControl.value"
+        [floatLabel]="getFloatLabelValue()">
+        <input matInput placeholder="First name" required>
+        <br>
+        <input matInput placeholder="Last name" required>
+        <br>
+        <input matInput placeholder="Email address" required>
+        <br>
+        <input matInput placeholder="Create username" required>
+        <br>
+        <input matInput placeholder="Create password" required>
+
+        <button mat-stroked-button> Sign Up</button>
+
+    </mat-form-field>
+</div> -->
+
+
+<!--<div class="uf"> Have a UF account? Sign in here</div>
+<div class="other"> Otherwise, create an account or sign in</div> -->
+
+<!-- Log in screen first-->
+<!-- Favorites, view/edit current parking permit (if user wants to change, take them to website),
+    Update user profile (name, email, profile pic), payment methods(?)
+    Users can look into preferred settings for the page/screen layout
+    After log in, should say, Hi, [User's first name]
+    Should also include sign out button-->

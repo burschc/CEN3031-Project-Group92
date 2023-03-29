@@ -4,7 +4,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    margin: 100px;
+    margin: 200px;
 }
 
 .map-frame {
@@ -12,6 +12,12 @@
     height: 100%;
 }
 
-#map {
+body {
+    margin: 0;
+    padding: 0;
+}
+
+html, body, #map {
     height: 100%;
+    width: 100%;
 }

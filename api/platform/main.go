@@ -1,30 +1,58 @@
 package main
 
 import (
-	"github.com/gorilla/handlers"
-	"github.com/gorilla/mux"
-	"github.com/pkg/browser"
+	"context"
 	"log"
 	"net/http"
 	"os"
-	"ufpmp/httpd/sprint1"
+	"os/signal"
+
+	"ufpmp/database"
+	"ufpmp/httpd/mux_functions"
+	"ufpmp/platform/arguments"
+	"ufpmp/python"
 )
 
 func main() {
-	//Run a command to create a new window using the system's default browser.
-	err := browser.OpenURL("http://localhost:8080/sprint1")
-	if err != nil {
-		log.Print(err)
+
+	//Process any command line arguments.
+	arguments.ProcessArguments()
+
+	//Set up the database, or open it if it already exists.
+	database.DeclareDatabase(database.DatabaseName)
+
+	//Make sure Python is installed and the virtual environment with all the required scripts is available.
+	log.Print("Checking Python Virtual Environment...\n\n")
+	python.SetupPythonVenv()
+
+	//Create the router and server for the web app and register the handlers for the mux_functions.
+	mux_functions.CreateAppServer(mux_functions.ServerProperties)
+	mux_functions.RegisterHandlers(mux_functions.ServerProperties.Router)
+
+	log.Printf("Starting http server accessible through %v...", mux_functions.ServerProperties.Server.Addr)
+
+	go func() {
+		if err := mux_functions.ServerProperties.Server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Printf("Server encountered an error:\n%v", err.Error())
+		}
+	}()
+
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	<-c
+
+	ServerShutdown()
+	os.Exit(0)
+}
+
+func ServerShutdown() {
+	log.Print("Shutting down server...")
+	ctx, cancel := context.WithTimeout(context.Background(), arguments.GracefulWait)
+	defer cancel()
+
+	if err := mux_functions.ServerProperties.Server.Shutdown(ctx); err != nil {
+		log.Fatal(err.Error())
 	}
 
-	//Create the GorillaMux router and register some endpoints for the mockup application.
-	r := mux.NewRouter()
-
-	r.HandleFunc("/sprint1", sprint1.PageLoad)
-	r.HandleFunc("/map/search", sprint1.SearchPostHandler).Methods("POST")
-	r.HandleFunc("/filter/pd", sprint1.FilterPostHandler).Methods("POST")
-
-	//Start the logging middleware and start web server on port 8080.
-	rlogged := handlers.LoggingHandler(os.Stdout, r)
-	log.Fatal(http.ListenAndServe(":8080", rlogged))
+	log.Print("Server has shut down successfully.")
 }

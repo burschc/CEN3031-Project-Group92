@@ -1,5 +1,33 @@
-<div class="map-container">
-    <div class="map-frame">
-        <div id="map"></div>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" 
+    integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script src="/js/leaflet-0.7.2/leaflet.ajax.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+    integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+    crossorigin=""></script>
+    <script src="https://raw.github.com/calvinmetcalf/leaflet-ajax/master/dist/leaflet.ajax.min.js"></script>   
+    <script src="leaflet-src.js"></script>
+    <script type="text/javascript" src="../dist/leaflet.ajax.js"></script>
+    <script src="spin.js"></script>
+</head>
+<body>
+    <div class="map-container">
+        <app-select id="filter" (decalEvent)="getParkingLots($event)"></app-select>
+        <div class="map-frame">
+            <div id="map"></div> 
+        </div>
     </div>
-</div>
+</body>
+</html>
+
+
+
