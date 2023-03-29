@@ -61,6 +61,7 @@ var ParkingDecals = map[string]Decal{
 		ParkingOptions: []string{
 			"Orange",
 			"Blue",
+			"Orange/Blue",
 			"Green",
 			"Student Green",
 			"Red One",
@@ -78,6 +79,7 @@ var ParkingDecals = map[string]Decal{
 		"Gated",
 		"Orange",
 		"Blue",
+		"Orange/Blue",
 		"Green",
 		"Red One",
 		"Red",
@@ -110,6 +112,7 @@ var ParkingDecals = map[string]Decal{
 		ParkingOptions: []string{
 			"Orange",
 			"Blue",
+			"Orange/Blue",
 			"Green",
 			"Red One",
 			"Red",
@@ -135,6 +138,7 @@ var ParkingDecals = map[string]Decal{
 		ParkingOptions: []string{
 			"Orange",
 			"Green",
+			"Orange/Blue",
 			"Any Decal",
 			"All Decals (No Park and Ride)",
 			"All Decals (No Red)",
@@ -154,6 +158,7 @@ var ParkingDecals = map[string]Decal{
 	"Medical Resident": {
 		ParkingOptions: []string{
 			"Orange",
+			"Orange/Blue",
 			"Green",
 			"Red One",
 			"Red",
@@ -196,6 +201,7 @@ var ParkingDecals = map[string]Decal{
 		ParkingOptions: []string{
 			"Orange",
 			"Blue",
+			"Orange/Blue",
 			"Green",
 			"Red One",
 			"Red",
@@ -213,6 +219,7 @@ var ParkingDecals = map[string]Decal{
 			"Carpool",
 			"Orange",
 			"Blue",
+			"Orange/Blue",
 			"Green",
 			"Any Decal",
 			"All Decals (No Park and Ride)",
@@ -237,6 +244,7 @@ var ParkingDecals = map[string]Decal{
 		ParkingOptions: []string{
 			"Orange",
 			"Blue",
+			"Orange/Blue",
 			"Green",
 			"Red One",
 			"Red",
