@@ -5,10 +5,11 @@ describe('handle dropdowns', () => {
         cy.visit('localhost:4200')
         cy.get('app-select#filter')
         cy.get('#select-form').click()
-        
         cy.get('.mat-mdc-form-field-infix')
         cy.get('#mat-option-0').click()
-        cy.get('#select-decal').click()
+        
+        // cy.get('#select-decal').click()
+        // cy.get('#select-decal').click(50, 50, { force: true })
         
         // cy.get('mat-mdc-select-min-line.ng-tns-c90-1.ng-star-inserted').contains('Reserved').click()
         // cy.get('.mdc-list-item__primary-text').contains('Reserved').click()
