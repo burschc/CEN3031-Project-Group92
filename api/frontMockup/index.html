@@ -12,6 +12,19 @@
             <label for="map/search" style="display:flex; align-items: center; padding-right: 5px;">Address or Building Name:</label>
             <input id=map/search name="map/search" type="search" placeholder="Address or Building" style="width: 50%;">
         </form>
+
+        <div style="background-color: #ff976e; display: flex">
+            <form>
+                <label for="username">Username</label><br>
+                <input type="text" id="username" name="password"><br>
+                <label for="username">Password</label><br>
+                <input type="password" id="password" name="password"><br>
+                <input type="submit" id="login" name="login" value="Login" formaction="/api/login" formmethod="post">
+                <input type="submit" id="signup" name="signup" value="Signup" formaction="/api/signup" formmethod="post">
+            </form>
+
+        </div>
+
     </div>
 
     <div>

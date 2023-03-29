@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+
 	"ufpmp/database"
 	"ufpmp/httpd/mux_functions"
 	"ufpmp/platform/arguments"
@@ -18,7 +19,7 @@ func main() {
 	arguments.ProcessArguments()
 
 	//Set up the database, or open it if it already exists.
-	database.SetupOrOpenBasicDatabase()
+	database.DeclareDatabase(database.DatabaseName)
 
 	//Make sure Python is installed and the virtual environment with all the required scripts is available.
 	log.Print("Checking Python Virtual Environment...\n\n")
