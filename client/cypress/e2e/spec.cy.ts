@@ -15,6 +15,5 @@ describe('Parking App Test', () => {
     cy.get('#mat-option-2 > .mdc-list-item__primary-text').contains('Orange')
     //cy.contains('Decals').click()
     //localhost:4200/api/filter/decal/{"Brown3"} //filters out the options and returns those in Brown3
-
   })
 })

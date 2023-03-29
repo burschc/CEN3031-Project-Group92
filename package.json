@@ -1,5 +1,11 @@
 {
   "devDependencies": {
     "cypress": "^12.7.0"
+  },
+  "dependencies": {
+    "@types/geojson": "^7946.0.10",
+    "jquery": "^3.6.4",
+    "leaflet-ajax": "^2.1.0",
+    "leaflet-geojson-vt": "^1.1.0"
   }
 }

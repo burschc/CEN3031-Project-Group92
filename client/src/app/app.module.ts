@@ -12,6 +12,7 @@ import { MapComponent } from './components/map/map.component';
 import { HeaderComponent } from './components/header/header.component';
 import { SelectComponent } from './components/select/select.component';
 import { ButtonComponent } from './components/button/button.component';
+import { DecalService } from './services/decal.service';
 
  
 @NgModule({
@@ -32,7 +33,7 @@ import { ButtonComponent } from './components/button/button.component';
     HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [DecalService],
   bootstrap: [AppComponent],
   
 })
