@@ -40,7 +40,7 @@ export class MapComponent implements OnInit{
   
   getParkingLots($event: any) {
     this.serviceData = $event
-    const url = 'http://localhost:8080/api/filter/decal/' + this.serviceData;
+    const url = 'http://localhost:4200/api/filter/decal/' + this.serviceData;
 
     fetch(url, {
       method: 'GET'

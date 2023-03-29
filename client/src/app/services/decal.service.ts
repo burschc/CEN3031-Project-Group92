@@ -7,8 +7,8 @@ import { Lot } from '../Lot';
   providedIn: 'root'
 })
 export class DecalService {
-  private decalUrl = 'http://localhost:8080/api/filter/decals'
-  private apiUrl = 'http://localhost:8080/api/filter/decal/'
+  private decalUrl = 'http://localhost:4200/api/filter/decals'
+  private apiUrl = 'http://localhost:4200/api/filter/decal/'
 
   constructor(private http: HttpClient) {}
 
