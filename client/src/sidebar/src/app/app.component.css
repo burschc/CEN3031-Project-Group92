@@ -1,0 +1,50 @@
+mat-toolbar {
+
+  background: rgb(20, 25, 139);
+  color: white;
+}
+
+mat-sidenav {
+
+  width: 200px;
+  border-right: none;
+  /*background: rgb(20, 25, 139);*/
+  color: white;
+  /*border-radius: 10px;*/
+  padding: 16px; 
+  text-align: center;
+  font: 25px;
+
+}
+
+
+.app-sidenav-content {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: darkgray;
+} 
+
+mat-sidenav-container{
+  height: 100%;    
+}  
+
+button {
+    margin-right: 8px;
+}
+
+/*.content { 
+  height: calc(100vh - 98px);
+  margin: 16px;
+  margin-left: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 2rem;
+  color: darkgray;
+
+  border-radius: 10px; 
+} */  
