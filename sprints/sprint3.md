@@ -2,7 +2,7 @@
 
 ## Relevant Links
 
-- Video
+- [Video](https://www.youtube.com/watch?v=oIkFgGd615g&feature=youtu.be)
 
 ## Work Completed this Sprint
 
