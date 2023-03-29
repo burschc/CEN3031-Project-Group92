@@ -9,7 +9,6 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 
 	"html"
-	"html/template"
 	"log"
 	"net/http"
 	_ "os"
@@ -78,6 +77,8 @@ func printDatabase() {
 // signup adds a specified account with given username and password to the database if it is not already present.
 func signup(res http.ResponseWriter, req *http.Request) {
 
+	req.ParseForm()
+
 	username := html.EscapeString(req.FormValue("username"))
 	password := html.EscapeString(req.FormValue("password"))
 
@@ -111,27 +112,6 @@ func signup(res http.ResponseWriter, req *http.Request) {
 
 // login recieves a username and password and checks if those are a valid pair.
 func login(res http.ResponseWriter, req *http.Request) {
-
-	if req.Method != "POST" {
-
-		message := "Enter username and password to login!"
-		retry := req.URL.Query().Get("retry")
-		checkRetry, _ := strconv.ParseBool(retry)
-		varmap := map[string]interface{}{
-			"Message": message,
-			"Status":  "",
-		}
-		if checkRetry == true {
-			message = "Invalid Username or Password!"
-			varmap["Message"] = message
-			varmap["Status"] = "error"
-		}
-
-		//http.ServeFile(res, req, "login.html")
-		t, _ := template.ParseFiles("templates/login.html")
-		t.Execute(res, varmap)
-		return
-	}
 	//logging
 	req.ParseForm()
 	username := html.EscapeString(req.FormValue("username"))
