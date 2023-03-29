@@ -26,8 +26,8 @@ const DatabaseName = "accountDB"
 var database *sql.DB
 
 func DatabaseHandlers(r *mux.Router) {
-	r.HandleFunc("/signup", signup).Methods(http.MethodGet, http.MethodOptions)
-	r.HandleFunc("/login", login).Methods(http.MethodGet, http.MethodOptions)
+	r.HandleFunc("/signup", signup).Methods(http.MethodPost, http.MethodOptions)
+	r.HandleFunc("/login", login).Methods(http.MethodPost, http.MethodOptions)
 
 	log.Print("Registered database handlers.")
 }
@@ -42,7 +42,7 @@ func DeclareDatabase(dbname string) {
 
 func LegacySetupOrOpenBasicDatabase() {
 	//Open the database.
-	database, _ := sql.Open("sqlite3", "testdb.db")
+	database, _ = sql.Open("sqlite3", "testdb.db")
 	//Make the database if it doesn't exist.
 	statement, _ := database.Prepare("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT, password TEXT, passtype INTEGER)")
 	_, _ = statement.Exec()
