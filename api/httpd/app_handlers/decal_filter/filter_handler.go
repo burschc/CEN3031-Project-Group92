@@ -11,10 +11,10 @@ import (
 	"ufpmp/httpd"
 )
 
-// parkingLots is the URL of the parking lots json file used for the decal filter.
+// parkingLotsURL is the URL of the parking lots json file used for the decal filter.
 // There are two possible json files for parking lots, and this one seems to be the more updated version.
 // The other json file can be found here: https://campusmap.ufl.edu/library/cmapjson/parking_lots.json.
-const parkingLots = "https://campusmap.ufl.edu/assets/parking_polys.json"
+const parkingLotsURL = "https://campusmap.ufl.edu/assets/parking_polys.json"
 
 // parkingJSON is the filename of the json file with the parking data located in the json cache folder.
 const parkingJSON = "parking_lots.json"
@@ -155,7 +155,7 @@ func getNewJSON() {
 	}
 
 	//Try to see if we can grab a new version of the json file. If we can't, we shouldn't try to validate anything.
-	if err := httpd.GetJSONFromURL(parkingLots, parkingJSON); err == nil {
+	if err := httpd.GetJSONFromURL(parkingLotsURL, parkingJSON); err == nil {
 		httpd.ValidateGeoJson(parkingJSON)
 		replaceLotClass()
 	}
@@ -171,7 +171,7 @@ func replaceLotClass() {
 	for i, v := range fc.Features {
 		lotClass, err := v.PropertyString(decalProperty)
 		if err != nil {
-			log.Print("(Feature # " + strconv.Itoa(i) + ") " + err.Error())
+			log.Print("(Feature # " + strconv.Itoa(i) + ") " + err.Error() + " ...but this may be expected.")
 			continue
 		}
 
