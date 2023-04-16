@@ -5,6 +5,8 @@ import (
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
+	"os"
+	"reflect"
 	"strings"
 	"ufpmp/httpd"
 )
@@ -21,6 +23,11 @@ const onlineBoilerplate = "?origin=*&srch="
 // locationsJSON is the filename of the json file with the parking data located in the json cache folder.
 const locationsJSON = "geo_buildings.json"
 
+// defaultLocationFilter is the name of the field in the location struct that we filter by default when getting
+// locations offline.
+const defaultLocationFilter = "Name"
+
+// Location is the structure of the locations JSON file using in JSON encoding and decoding.
 type Location struct {
 	Code         string  `json:"BLDGCODE"`
 	ID           string  `json:"BLDG"`
@@ -34,17 +41,29 @@ type Location struct {
 // LocationSearchHandlers register the back-end handlers used for the location search feature.
 func LocationSearchHandlers(r *mux.Router) {
 	r.HandleFunc("/search/offline/{location}", offlineLocationHandler).Methods(http.MethodGet, http.MethodOptions)
-	r.HandleFunc("/search/online/{location}", onlineLocationHandler).Methods(http.MethodGet, http.MethodOptions)
+	r.HandleFunc("/search/offline/{location}/{filter}", offlineLocationHandler).Methods(http.MethodGet, http.MethodOptions)
+	r.HandleFunc("/search/online/{location}/", onlineLocationHandler).Methods(http.MethodGet, http.MethodOptions)
 
 	log.Print("Registered online and offline search handlers.")
 }
 
-// offlineLocationHandler
-func offlineLocationHandler(w http.ResponseWriter, _ *http.Request) {
+// offlineLocationHandle encodes the result of the getLocationsOffline function into a JSON response which gets sent back
+// to the requester.
+func offlineLocationHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	if vars["filter"] == "" {
+		vars["filter"] = defaultLocationFilter
+	}
+
 	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(getLocationsOffline(vars["location"], vars["filter"])); err != nil {
+		httpd.PipeError(w, err)
+	}
 }
 
-// onlineLocationHandler
+// onlineLocationHandler encodes the result of the getLocationsOnline function into a JSON response which gets sent back
+// to the requester.
 func onlineLocationHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
@@ -91,4 +110,47 @@ func getLocationsOnline(location string) []Location {
 	}
 
 	return data
+}
+
+// getLocationsOffline first tries to get a new JSON file if the locations JSON is not in the cache or is too old. Then,
+// it sifts through an encoded version of the file for specified locations and returns the result as a Location struct array.
+func getLocationsOffline(location string, filter string) []Location {
+	//Get the JSON file if we already do not have it in the cache.
+	httpd.GetNewJSON(locationsJSON, locationsURL, func(string) {})
+
+	//Open the file to encode it in JSON format.
+	reader, err := os.Open(httpd.JsonCachePath + locationsJSON)
+	if err != nil {
+		log.Printf("Failed to open the file '%v': %v", locationsJSON, err.Error())
+		return nil
+	}
+
+	defer reader.Close()
+
+	//Encode the data in the location array format.
+	var data []Location
+	decoder := json.NewDecoder(reader)
+	err = decoder.Decode(&data)
+	if err != nil {
+		log.Printf("Failed to encode '%v' into the locations structure: %v", locationsJSON, err.Error())
+		return nil
+	}
+
+	//Sift through the array for any building names that contain the supplied string.
+	var filteredData []Location
+
+	for _, v := range data {
+		field := reflect.ValueOf(v).FieldByName(filter)
+
+		if strings.Contains(field.String(), location) {
+			filteredData = append(filteredData, v)
+		}
+	}
+
+	//Close the reader like a good little developer.
+	if err = reader.Close(); err != nil {
+		log.Printf("Failed to close the reader for the locations JSON file: %v", err.Error())
+	}
+
+	return filteredData
 }

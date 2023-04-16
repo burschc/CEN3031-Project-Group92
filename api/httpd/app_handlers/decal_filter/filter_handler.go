@@ -6,7 +6,6 @@ import (
 	geojson "github.com/paulmach/go.geojson"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 	"ufpmp/httpd"
 )
@@ -87,10 +86,10 @@ func findDecalHandler(w http.ResponseWriter, r *http.Request) {
 // It returns a feature collection.
 func findDecal(decal string) *geojson.FeatureCollection {
 	//Get the JSON file if we already do not have it in the cache.
-	if !httpd.IsFresh(parkingJSON) {
-		log.Print(parkingJSON + " is not fresh!")
-		getNewJSON()
-	}
+	httpd.GetNewJSON(parkingJSON, parkingLotsURL, func(filename string) {
+		httpd.ValidateGeoJson(filename)
+		replaceLotClass()
+	})
 
 	/*Make a new feature collection and then sift through the json file's feature collection for entries that
 	  have the same decal property value as wwe are looking for.*/
@@ -126,10 +125,10 @@ func findDecal(decal string) *geojson.FeatureCollection {
 // getDecalTypesJSON returns an array containing all the unique decals in the parking lots json file.
 func getDecalTypesJSON() []interface{} {
 	//Get the JSON file if we already do not have it in the cache.
-	if !httpd.IsFresh(parkingJSON) {
-		log.Print(parkingJSON + " is not fresh!")
-		getNewJSON()
-	}
+	httpd.GetNewJSON(parkingJSON, parkingLotsURL, func(filename string) {
+		httpd.ValidateGeoJson(filename)
+
+	})
 
 	set := make(map[interface{}]bool)
 	var decals []interface{}
@@ -146,19 +145,6 @@ func getDecalTypesJSON() []interface{} {
 	}
 
 	return decals
-}
-
-func getNewJSON() {
-	//Try to see if we can remove the current json file.
-	if err := os.Remove(httpd.JsonCachePath + parkingJSON); err != nil {
-		log.Print(err)
-	}
-
-	//Try to see if we can grab a new version of the json file. If we can't, we shouldn't try to validate anything.
-	if err := httpd.GetJSONFromURL(parkingLotsURL, parkingJSON); err == nil {
-		httpd.ValidateGeoJson(parkingJSON)
-		replaceLotClass()
-	}
 }
 
 // replaceLotClass replaces obfuscated lot_class values for their actual equivalents.
