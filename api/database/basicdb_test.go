@@ -15,7 +15,7 @@ var r *mux.Router
 var client *http.Client
 
 const username1 = "jdoe"
-const username2 = "appledontsue"
+const username2 = "applesauce"
 
 const password1 = "password"
 const password2 = "ohno"
@@ -39,11 +39,34 @@ func TestSignup(t *testing.T) {
 
 	const endpoint = "/api/signup"
 
-	t.Run("Should create user jdoe", func(t *testing.T) {
+	t.Run("Should create user"+username1, func(t *testing.T) {
 		form := url.Values{}
 		form.Add("username", username1)
 		form.Add("password", password1)
-		//form.Add("signup", "Signup")
+
+		request := httptest.NewRequest(http.MethodPost, endpoint, strings.NewReader(form.Encode()))
+		request.Form = form
+
+		recorder := httptest.NewRecorder()
+		r.ServeHTTP(recorder, request)
+
+		//Get the response and read it as a byte array.
+		res := recorder.Result()
+		defer res.Body.Close()
+
+		if res.StatusCode != http.StatusOK {
+			t.Errorf("Signup for "+username1+" failed (Expected %v, got %v)!", http.StatusOK, res.StatusCode)
+		}
+
+		if err := res.Body.Close(); err != nil {
+			log.Printf("Failed to close response body: %v", err.Error())
+		}
+	})
+
+	t.Run("Should create user "+username2, func(t *testing.T) {
+		form := url.Values{}
+		form.Add("username", username2)
+		form.Add("password", password2)
 
 		request := httptest.NewRequest(http.MethodPost, endpoint, strings.NewReader(form.Encode()))
 		request.Form = form
@@ -58,7 +81,7 @@ func TestSignup(t *testing.T) {
 		printDatabase()
 
 		if res.StatusCode != http.StatusOK {
-			t.Errorf("Signup failed (Expected %v, got %v)!", http.StatusOK, res.StatusCode)
+			t.Errorf("Signup for "+username2+" failed (Expected %v, got %v)!", http.StatusOK, res.StatusCode)
 		}
 
 		if err := res.Body.Close(); err != nil {
@@ -71,13 +94,35 @@ func TestSignin(t *testing.T) {
 
 	const endpoint = "/api/login"
 
-	t.Cleanup(cleanup)
-
-	t.Run("Should sign into jdoe", func(t *testing.T) {
+	t.Run("Should sign into "+username1, func(t *testing.T) {
 		form := url.Values{}
 		form.Add("username", username1)
 		form.Add("password", password1)
-		//form.Add("login", "Login")
+
+		request := httptest.NewRequest(http.MethodPost, endpoint, strings.NewReader(form.Encode()))
+		request.Form = form
+
+		recorder := httptest.NewRecorder()
+		r.ServeHTTP(recorder, request)
+
+		//Get the response and read it as a byte array.
+		res := recorder.Result()
+		defer res.Body.Close()
+
+		if res.StatusCode != http.StatusOK {
+			t.Errorf("Signin for "+username2+" failed (Expected %v, got %v)!", http.StatusOK, res.StatusCode)
+		}
+
+		if err := res.Body.Close(); err != nil {
+			log.Printf("Failed to close response body: %v", err.Error())
+		}
+
+	})
+
+	t.Run("Should sign into "+username2, func(t *testing.T) {
+		form := url.Values{}
+		form.Add("username", username2)
+		form.Add("password", password2)
 
 		request := httptest.NewRequest(http.MethodPost, endpoint, strings.NewReader(form.Encode()))
 		request.Form = form
@@ -92,7 +137,121 @@ func TestSignin(t *testing.T) {
 		printDatabase()
 
 		if res.StatusCode != http.StatusOK {
-			t.Errorf("Signin failed (Expected %v, got %v)!", http.StatusOK, res.StatusCode)
+			t.Errorf("Signin for "+username2+" failed (Expected %v, got %v)!", http.StatusOK, res.StatusCode)
+		}
+
+		if err := res.Body.Close(); err != nil {
+			log.Printf("Failed to close response body: %v", err.Error())
+		}
+
+	})
+}
+
+func TestPreexistingUser(t *testing.T) {
+
+	const endpoint = "/api/signup"
+
+	t.Run("Should fail to create duplicate "+username1, func(t *testing.T) {
+		form := url.Values{}
+		form.Add("username", username1)
+		form.Add("password", password1)
+
+		request := httptest.NewRequest(http.MethodPost, endpoint, strings.NewReader(form.Encode()))
+		request.Form = form
+
+		recorder := httptest.NewRecorder()
+		r.ServeHTTP(recorder, request)
+
+		//Get the response and read it as a byte array.
+		res := recorder.Result()
+		defer res.Body.Close()
+
+		//printDatabase()
+
+		if res.StatusCode != http.StatusConflict {
+			t.Errorf("Duplicate signup for "+username1+" did not fail expected (Expected %v, got %v)!", http.StatusConflict, res.StatusCode)
+		}
+
+		if err := res.Body.Close(); err != nil {
+			log.Printf("Failed to close response body: %v", err.Error())
+		}
+	})
+	t.Run("Should fail to create duplicate "+username2, func(t *testing.T) {
+		form := url.Values{}
+		form.Add("username", username2)
+		form.Add("password", password1) //password doesn't matter since username already exists
+
+		request := httptest.NewRequest(http.MethodPost, endpoint, strings.NewReader(form.Encode()))
+		request.Form = form
+
+		recorder := httptest.NewRecorder()
+		r.ServeHTTP(recorder, request)
+
+		//Get the response and read it as a byte array.
+		res := recorder.Result()
+		defer res.Body.Close()
+
+		//printDatabase()
+
+		if res.StatusCode != http.StatusConflict {
+			t.Errorf("Duplicate signup for "+username2+" did not fail expected (Expected %v, got %v)!", http.StatusConflict, res.StatusCode)
+		}
+
+		if err := res.Body.Close(); err != nil {
+			log.Printf("Failed to close response body: %v", err.Error())
+		}
+	})
+}
+
+func TestInvalidCredentials(t *testing.T) {
+
+	const endpoint = "/api/login"
+
+	t.Cleanup(cleanup)
+
+	t.Run("Should fail to sign into "+username1, func(t *testing.T) {
+		form := url.Values{}
+		form.Add("username", username1)
+		form.Add("password", password1+"a")
+
+		request := httptest.NewRequest(http.MethodPost, endpoint, strings.NewReader(form.Encode()))
+		request.Form = form
+
+		recorder := httptest.NewRecorder()
+		r.ServeHTTP(recorder, request)
+
+		//Get the response and read it as a byte array.
+		res := recorder.Result()
+		defer res.Body.Close()
+
+		if res.StatusCode != http.StatusUnauthorized {
+			t.Errorf("Signin for "+username1+" did not fail as expected (Expected %v, got %v)!", http.StatusUnauthorized, res.StatusCode)
+		}
+
+		if err := res.Body.Close(); err != nil {
+			log.Printf("Failed to close response body: %v", err.Error())
+		}
+
+	})
+	t.Run("Should fail to sign into "+username2, func(t *testing.T) {
+		form := url.Values{}
+		form.Add("username", username2)
+		form.Add("password", password1)
+
+		request := httptest.NewRequest(http.MethodPost, endpoint, strings.NewReader(form.Encode()))
+		request.Form = form
+
+		recorder := httptest.NewRecorder()
+		r.ServeHTTP(recorder, request)
+
+		//Get the response and read it as a byte array.
+		res := recorder.Result()
+		defer res.Body.Close()
+
+		printDatabase()
+
+		if res.StatusCode != http.StatusUnauthorized {
+			t.Errorf("Signin for "+username2+" did not fail as expected (Expected %v, got %v)!", http.StatusUnauthorized, res.StatusCode)
 		}
 
 		if err := res.Body.Close(); err != nil {
@@ -106,7 +265,6 @@ func cleanup() {
 	Database.Close()
 
 	log.Printf("Use Status: %v", Database.Database.Stats().InUse)
-
 	if err := os.Remove("test.db"); err != nil {
 		log.Fatalf("Remove the file yourself ya bum! %v", err.Error())
 	}

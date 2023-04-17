@@ -102,7 +102,7 @@ func signup(res http.ResponseWriter, req *http.Request) {
 	var user string
 
 	err := Database.Database.QueryRow("SELECT username FROM users WHERE username=?", username).Scan(&user)
-
+	log.Printf("error: %v", err)
 	switch {
 	case err == sql.ErrNoRows:
 		hashedPassword, err2 := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
@@ -112,7 +112,7 @@ func signup(res http.ResponseWriter, req *http.Request) {
 		}
 		//log.Printf(string(hashedPassword))
 		//passtype -1 being "no passtype declared" -> defaulting to showing all types
-		http.Error(res, "entered username is "+username+" and password was "+password, http.StatusOK)
+		//http.Error(res, "entered username is "+username+" and password was "+password, http.StatusOK)
 		statement, _ := Database.Database.Prepare("INSERT INTO users (username, password, passtype) VALUES (?, ?, ?)")
 		_, err2 = statement.Exec(username, hashedPassword, -1)
 		if err2 != nil {
@@ -126,10 +126,13 @@ func signup(res http.ResponseWriter, req *http.Request) {
 
 		res.Write([]byte("User created!"))
 	case err != nil:
-		http.Error(res, "Existing user error, unable to create your account.", http.StatusConflict)
-	default:
+
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte("Unknown error."))
+		//http.Error(res, "Existing user error, unable to create your account.", http.StatusConflict)
+	default:
+		res.WriteHeader(http.StatusConflict)
+		res.Write([]byte("Existing user error, unable to create your account."))
 	}
 }
 
