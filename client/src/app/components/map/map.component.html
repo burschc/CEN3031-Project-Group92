@@ -20,8 +20,13 @@
     <script src="leaflet-src.js"></script>
     <script type="text/javascript" src="../dist/leaflet.ajax.js"></script>
     <script src="spin.js"></script>
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
+   
 </head>
 <body>
+    <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
+    <script src="http://labs.easyblog.it/maps/leaflet-layerjson/src/leaflet-layerjson.js"></script>
     <div class="map-container">
         <app-select id="filter" (decalEvent)="getParkingLots($event)"></app-select>
         <app-search id="search" (buildingEvent)="getBuildings($event)"></app-search>

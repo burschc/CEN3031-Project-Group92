@@ -49,7 +49,6 @@ export class MapComponent implements OnInit{
     const url = 'http://localhost:4200/api/search/offline/' + this.buildingData;
     console.log(this.buildingData);
     console.log(url);
-
     var myIcon = Leaflet.icon({
       iconUrl: 'marker-icon.png',
       iconSize: [25, 32],
@@ -65,14 +64,14 @@ export class MapComponent implements OnInit{
       console.log(json);
       if (this._json) {
         this._json.clearLayers();
-        this._json.addData(json);
       }
       else {
-        this._json = Leaflet.geoJSON(json, {
-        })
-        .addTo(this.map);
-      }
-    })
+        this._json = Leaflet.featureGroup().addTo(this.map);
+        }
+        json.forEach((item: { LAT: number; LON: number; }) => {
+          Leaflet.marker([item.LAT, item.LON],{icon: myIcon}).addTo(this._json);
+        });
+      })
     .catch(error => {
       console.log('error!')
       console.error(error)
@@ -89,6 +88,7 @@ export class MapComponent implements OnInit{
     })
     .then(response => response.json())
     .then(json => {
+      console.log(json);
       if (this.geojson) {
         this.geojson.clearLayers();
         this.geojson.addData(json);
