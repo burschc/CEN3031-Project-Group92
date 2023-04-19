@@ -4,6 +4,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="style" type="css" href="client/src/plugins/leaflet-search-master/dist/leaflet-search.src.css"/>
+    <script src="client/src/plugins/leaflet-search-master/dist/leaflet-search.src.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" 
     integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <script src="/js/leaflet-0.7.2/leaflet.ajax.min.js"></script>
@@ -22,8 +24,10 @@
 <body>
     <div class="map-container">
         <app-select id="filter" (decalEvent)="getParkingLots($event)"></app-select>
+        <app-search id="search" (buildingEvent)="getBuildings($event)"></app-search>
         <div class="map-frame">
-            <div id="map"></div> 
+            <div id="map">
+            </div> 
         </div>
     </div>
 </body>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as Leaflet from 'leaflet'; 
+import 'leaflet-search';
 
 @Component({
   selector: 'app-map', 
@@ -11,10 +12,14 @@ export class MapComponent implements OnInit{
   constructor() {}
 
   serviceData="";
+  buildingData="";
   private map!: Leaflet.Map;
   private centroid: Leaflet.LatLngExpression = [29.64833, -82.34944];
   geojson: Leaflet.GeoJSON<any> | null = null;
+  _json: any;
+  buildingjson: any;
 
+  
 
   private initMap(): void {
     
@@ -38,10 +43,47 @@ export class MapComponent implements OnInit{
   }
 
   
+
+  getBuildings($event: any) {
+    this.buildingData = $event
+    const url = 'http://localhost:4200/api/search/offline/' + this.buildingData;
+    console.log(this.buildingData);
+    console.log(url);
+
+    var myIcon = Leaflet.icon({
+      iconUrl: 'marker-icon.png',
+      iconSize: [25, 32],
+      iconAnchor: [25, 32],
+    });
+
+
+    fetch(url, {
+      method: 'GET'
+    })
+    .then(response => response.json())
+    .then(json => {
+      console.log(json);
+      if (this._json) {
+        this._json.clearLayers();
+        this._json.addData(json);
+      }
+      else {
+        this._json = Leaflet.geoJSON(json, {
+        })
+        .addTo(this.map);
+      }
+    })
+    .catch(error => {
+      console.log('error!')
+      console.error(error)
+    });
+  }
+    
+  
   getParkingLots($event: any) {
     this.serviceData = $event
     const url = 'http://localhost:4200/api/filter/decal/' + this.serviceData;
-
+    console.log(url)
     fetch(url, {
       method: 'GET'
     })
