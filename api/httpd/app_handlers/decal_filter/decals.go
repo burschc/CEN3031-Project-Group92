@@ -1,5 +1,10 @@
 package decal_filter
 
+import (
+	"log"
+	"sort"
+)
+
 //The information for this file is based on https://taps.ufl.edu/permits. They are statically defined because the JSON
 //file can only describe SO much and TAPS can only be SO accurate and consistent with their information.
 
@@ -306,11 +311,43 @@ type SpecialRestriction struct {
 //											PUBLIC UTILITY FUNCTIONS												  //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-func GetNames() []string {
+// GetAllNames returns an array of all the decal names.
+func GetAllNames() []string {
 	var names []string
-	for k, _ := range ParkingDecals {
+	for k := range ParkingDecals {
 		names = append(names, k)
 	}
 
+	sort.Strings(names)
+
 	return names
+}
+
+// GetIndex returns the index of a decal name. It returns -1 if the decal name does not exist.
+func GetIndex(decal string) int {
+	//Check if it exists first.
+	if _, ok := ParkingDecals[decal]; !ok {
+		log.Printf("Decal '%v' does not exist.", decal)
+		return -1
+	}
+
+	names := GetAllNames()
+
+	for i, v := range names {
+		if v == decal {
+			return i
+		}
+	}
+
+	return -1
+}
+
+// GetName returns the name of a decal given its corresponding place in the map. Will return any if index is greater
+// than the number of decals in the map.
+func GetName(passtype int) string {
+	if passtype >= len(ParkingDecals) || passtype < 0 {
+		return "any"
+	}
+
+	return GetAllNames()[passtype]
 }

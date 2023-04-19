@@ -3,11 +3,11 @@ package database
 import (
 	"database/sql"
 	"fmt"
-	"strconv"
-	"ufpmp/httpd"
-
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
+	"strconv"
+	"ufpmp/httpd"
+	"ufpmp/httpd/cookies"
 
 	"html"
 	"log"
@@ -35,6 +35,7 @@ var Database DB
 func DatabaseHandlers(r *mux.Router) {
 	r.HandleFunc("/signup", signup).Methods(http.MethodPost, http.MethodOptions)
 	r.HandleFunc("/login", login).Methods(http.MethodPost, http.MethodOptions)
+	r.HandleFunc("/logout", logout).Methods(http.MethodPost, http.MethodOptions)
 
 	log.Print("Registered Database handlers.")
 }
@@ -161,6 +162,10 @@ func login(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	cookies.SetLoginCookie(res, databaseUsername)
 	res.Write([]byte("Hello " + databaseUsername))
+}
 
+func logout(res http.ResponseWriter, req *http.Request) {
+	cookies.ExpireLoginCookie(res, req)
 }
