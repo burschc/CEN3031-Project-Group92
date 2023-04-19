@@ -19,15 +19,15 @@ export class DecalService {
     return this.http.get(this.decalUrl);
   }
 
-  getData(): Observable<any>{
-    return this.http.get(this.listBuildingURL);
+  getData(): Observable<Building[]>{
+    return this.http.get<Building[]>(this.listBuildingURL);
   }
   
   getParkingLots(): Observable<Lot[]> {
     return this.http.get<Lot[]>(this.apiUrl);
   }
   
-  getBuildings(): Observable<any> {
+  getBuildings(): Observable<Building[]> {
     return this.http.get<Building[]>(this.listBuildingURL);
   }
  

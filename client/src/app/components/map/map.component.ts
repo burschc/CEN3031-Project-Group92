@@ -19,8 +19,6 @@ export class MapComponent implements OnInit{
   _json: any;
   buildingjson: any;
 
-  
-
   private initMap(): void {
     
     // Making a map and tiles
@@ -82,7 +80,6 @@ export class MapComponent implements OnInit{
     });
   }
     
-  
   getParkingLots($event: any) {
     this.serviceData = $event
     const url = 'http://localhost:4200/api/filter/decal/' + this.serviceData;

@@ -6,6 +6,7 @@
 .selectcontainer {
    display: flex;
    justify-content: space-around;
+   left: 50;
 }
 .wrapper {
     width: 50%;
