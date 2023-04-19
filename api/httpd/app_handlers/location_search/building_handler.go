@@ -27,6 +27,9 @@ const locationsJSON = "geo_buildings.json"
 // locations offline.
 const defaultLocationFilter = "Name"
 
+// locationWildcard is the symbol used to make the web app return all locations.
+const locationWildcard = "*"
+
 // Location is the structure of the locations JSON file using in JSON encoding and decoding.
 type Location struct {
 	Code         string  `json:"BLDGCODE"`
@@ -42,7 +45,7 @@ type Location struct {
 func LocationSearchHandlers(r *mux.Router) {
 	r.HandleFunc("/search/offline/{location}", offlineLocationHandler).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/search/offline/{location}/{filter}", offlineLocationHandler).Methods(http.MethodGet, http.MethodOptions)
-	r.HandleFunc("/search/online/{location}/", onlineLocationHandler).Methods(http.MethodGet, http.MethodOptions)
+	r.HandleFunc("/search/online/{location}", onlineLocationHandler).Methods(http.MethodGet, http.MethodOptions)
 
 	log.Print("Registered online and offline search handlers.")
 }
@@ -76,6 +79,11 @@ func onlineLocationHandler(w http.ResponseWriter, r *http.Request) {
 // getLocationsOnline sends a response to the online campus map API endpoint for location searches and returns the response
 // in a pre-written struct format.
 func getLocationsOnline(location string) []Location {
+	//See if the search term was an asterisk. If so, change the search term to be an empty string to return all.
+	if location == locationWildcard {
+		location = ""
+	}
+
 	//Get the corresponding JSON file from the online API.
 	get, err := http.Get(strings.Replace(locationsURL+onlineBoilerplate+location, " ", "%20", -1))
 	if err != nil {
@@ -134,6 +142,11 @@ func getLocationsOffline(location string, filter string) []Location {
 	if err != nil {
 		log.Printf("Failed to encode '%v' into the locations structure: %v", locationsJSON, err.Error())
 		return nil
+	}
+
+	//See if the search term was an asterisk. If so, return the entire array.
+	if location == locationWildcard {
+		return data
 	}
 
 	//Sift through the array for any building names that contain the supplied string.
