@@ -1,9 +1,15 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { SettingComponent } from './setting.component';
-import { AccountComponent } from './account.component';
-import { ScheduleComponent } from './schedule.component';
-import { AboutComponent } from './about.component';
+//import { FormsModule } from '@angular/forms';
+//import { MatButtonModule } from '@angular/material/button';
+
+import { AccountComponent } from './account/account.component';
+import { ScheduleComponent } from './schedule/schedule.component';
+import { AboutComponent } from './about/about.component';
+import { LinksComponent } from './links/links.component';
+//import {MatFormFieldModule} from '@angular/material/form-field';
+//import {CdkAccordionModule} from '@angular/cdk/accordion';
+
 
 @Component({
   selector: 'app-root',
@@ -12,14 +18,15 @@ import { AboutComponent } from './about.component';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+
   title = 'final';
 
   constructor(public dialog: MatDialog) { }
 
-  openSettings() {
-    const dialogRef = this.dialog.open(SettingComponent, {
-      id: 'setting',
-      panelClass: 's-style'
+  openLinks() {
+    const dialogRef = this.dialog.open(LinksComponent, {
+      id: 'links',
+      panelClass: 'link-style'
     });
 
     console.log(dialogRef);
@@ -51,5 +58,8 @@ export class AppComponent {
 
     console.log(dialogRef);
   }
-}
+
+
+
+} 
 
