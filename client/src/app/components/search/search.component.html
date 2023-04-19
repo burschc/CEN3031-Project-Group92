@@ -1,33 +1,16 @@
-<div class="searchcontainer">
-  <div class="row">
-    <div class="col-md-12">
-      <form class="form mt-5">
-        <label for="exampleDataList" class="form-label">Datalist example</label>
-        <input
-          class="form-control"
-          list="datalistOptions"
-          id="exampleDataList"
-          placeholder="Type to search..."
-        />
-        <datalist id="datalistOptions">
-          <option *ngFor="let building of buildingList" [value]="building.NAME">
-            {{ building.NAME }}
-          </option>
-        </datalist>
-      </form>
-    </div>
-  </div>
-
-  <mat-form-field appearance="outline" id="select-form">
-    <mat-label> Building </mat-label>
-    <input type="text"
-    matInput
-    [formControl]="buildings" [(ngModel)]="buildingSelected" (ngModelChange)="onSelected()"
-    [matAutocomplete]="auto" />
-    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-      <mat-option *ngFor="let building of buildingList" [value]="building.NAME">
-        {{ building.NAME }}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
+<div class="overlay">
+  <form class="form">
+    <mat-form-field class="full-width"appearance="outline" id="select-form">
+      <mat-label>Buildings</mat-label>
+      <input type="text"
+      matInput
+      [formControl]="buildings" [(ngModel)]="buildingSelected" (ngModelChange)="onSelected()"
+      [matAutocomplete]="auto" />
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let building of buildingList " [value]="building.NAME">
+          {{ building.NAME }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
 </div>

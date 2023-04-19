@@ -2,7 +2,7 @@ import { Component, EventEmitter,OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { DecalService } from '../../services/decal.service';
 import { Building } from 'src/app/Building';
-import { startWith } from 'rxjs/operators';
+import { startWith,map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-search',
@@ -22,8 +22,6 @@ export class SearchComponent implements OnInit{
   }
 
   getAllData() {
-    // this.data.getData().subscribe(buildings => this.buildingList = buildings);
-    // console.log(this.buildings);
     this.data.getData().subscribe((res: any) => {
       this.buildingList = res;
       console.log(res);

@@ -39,7 +39,7 @@ export class MapComponent implements OnInit{
       iconAnchor: [25, 32],
     });
     const marker = Leaflet.marker([0,0], {icon: myIcon}).addTo(this.map);
-    marker.setLatLng(this.centroid);
+    // marker.setLatLng(this.centroid);
   }
 
   
@@ -52,7 +52,8 @@ export class MapComponent implements OnInit{
     var myIcon = Leaflet.icon({
       iconUrl: 'marker-icon.png',
       iconSize: [25, 32],
-      iconAnchor: [25, 32],
+      iconAnchor: [12, 32],
+      popupAnchor: [0,-28]
     });
 
 
@@ -68,8 +69,11 @@ export class MapComponent implements OnInit{
       else {
         this._json = Leaflet.featureGroup().addTo(this.map);
         }
-        json.forEach((item: { LAT: number; LON: number; }) => {
-          Leaflet.marker([item.LAT, item.LON],{icon: myIcon}).addTo(this._json);
+        json.forEach((item: { LAT: number; LON: number; NAME: any; BLDGCODE: string; BLDG: string; ABBREV: string; OFFICIAL_ROOM_NAME: string; }) => {
+          Leaflet.marker([item.LAT, item.LON],{icon: myIcon}).bindPopup("<b>Building: " + item.BLDG + 
+          "<br><b>Building Code: " + item.BLDGCODE +
+          "<br><b>Building Name: " + item.NAME + 
+          "<br><b>Official Room: " + item.OFFICIAL_ROOM_NAME ).addTo(this._json);
         });
       })
     .catch(error => {
