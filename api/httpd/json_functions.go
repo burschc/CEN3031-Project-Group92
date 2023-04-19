@@ -12,6 +12,7 @@ import (
 	"runtime"
 	"strings"
 	"time"
+	"ufpmp/python"
 )
 
 // JsonCachePath is the default folder to place json files that the application needs.
@@ -19,9 +20,6 @@ const JsonCachePath = "cache/json/"
 
 // PythonScripts is the folder containing all project-specific created python code.
 const PythonScripts = "python/"
-
-// PythonVenv is the folder containing the project's python virtual environment.
-const PythonVenv = "python/venv/"
 
 // DefaultUpdateTime is the default time, in parsable form, to auto-update the geojson file for a non-logged in user.
 const DefaultUpdateTime = "24h"
@@ -137,6 +135,9 @@ func FCToFile(filename string, fc *geojson.FeatureCollection) error {
 
 // ValidateGeoJson will run gjf (a python script) on the target geojson file to fix any issues it may have.
 func ValidateGeoJson(filename string) {
+	if python.IgnorePython {
+		return
+	}
 
 	//Validate the file using gjf (overwrite flag crashes the program when executing from golang).
 	log.Print("Calling gjf on " + filename)
@@ -145,11 +146,11 @@ func ValidateGeoJson(filename string) {
 
 	if osName == "windows" {
 		log.Print("Running gjf as a Windows venv Python script file.")
-		cmd := exec.Command(PythonVenv+"Scripts/gjf", JsonCachePath+filename)
+		cmd := exec.Command(python.PythonVenv+"Scripts/gjf", JsonCachePath+filename)
 		log.Print(cmd.Run())
 	} else if (osName == "darwin") || (osName == "linux") {
 		log.Print("Running gjf as a Linux/Darwin venv Python script file.")
-		cmd := exec.Command(PythonVenv+"bin/gjf", JsonCachePath+filename)
+		cmd := exec.Command(python.PythonVenv+"bin/gjf", JsonCachePath+filename)
 		log.Print(cmd.Run())
 	} else {
 		log.Print("Unsupported OS for venv Python script. The JSON File will NOT be fixed.")
