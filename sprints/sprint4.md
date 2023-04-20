@@ -23,6 +23,8 @@ User decal preferences can also be set with /api/account/set/passtype/{passtype}
 
 ## Cypress Tests
 - Dropdowns.cy.js visits the default page (currently localhost:4200), and attempts to open the dropdown menu and check a random parking type option box, ensuring it the positioning matches what was that type should be.
+- HandleSearchBuildingByName enters a building name and makes sure it is shown
+- HandleSearchBuildingByNumber enters a building number and makes sure it is shown
 
 ## Backend Tests
 - TestGitHubJSON: Pulls a json file from the api on Github. Checks for json content and verifies that the file was downloaded properly. It then cleans up by deleting the file from the cache.
