@@ -1,6 +1,7 @@
 {
   "name": "ufparking-map",
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.config.json",
@@ -30,7 +31,11 @@
     "leaflet-search": "^3.0.9",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.12.0"
+    "zone.js": "~0.12.0",
+    "bootstrap": "^5.2.3",
+    "jquery": "^3.6.4",
+    "ngx-bootstrap": "^10.2.0",
+    "ol": "^7.3.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^15.1.4",
