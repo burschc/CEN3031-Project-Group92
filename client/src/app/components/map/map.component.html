@@ -4,6 +4,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="style" type="css" href="client/src/plugins/leaflet-search-master/dist/leaflet-search.src.css"/>
+    <script src="client/src/plugins/leaflet-search-master/dist/leaflet-search.src.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" 
     integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <script src="/js/leaflet-0.7.2/leaflet.ajax.min.js"></script>
@@ -18,12 +20,19 @@
     <script src="leaflet-src.js"></script>
     <script type="text/javascript" src="../dist/leaflet.ajax.js"></script>
     <script src="spin.js"></script>
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
+   
 </head>
 <body>
+    <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
+    <script src="http://labs.easyblog.it/maps/leaflet-layerjson/src/leaflet-layerjson.js"></script>
     <div class="map-container">
         <app-select id="filter" (decalEvent)="getParkingLots($event)"></app-select>
+        <app-search id="search" (buildingEvent)="getBuildings($event)"></app-search>
         <div class="map-frame">
-            <div id="map"></div> 
+            <div id="map">
+            </div> 
         </div>
     </div>
 </body>

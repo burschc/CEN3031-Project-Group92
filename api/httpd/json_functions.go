@@ -24,9 +24,27 @@ const PythonScripts = "python/"
 // DefaultUpdateTime is the default time, in parsable form, to auto-update the geojson file for a non-logged in user.
 const DefaultUpdateTime = "24h"
 
+type Validation func(string)
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //											PUBLIC UTILITY FUNCTIONS												  //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func GetNewJSON(filename string, url string, validation Validation) {
+	if !IsFresh(filename) {
+		log.Printf("%v is not fresh (older than %v/doesn't exist)! Getting a new one...", filename, DefaultUpdateTime)
+		//Try to see if we can remove the current json file.
+		if err := os.Remove(JsonCachePath + filename); err != nil {
+			log.Printf("Could not remove %v: %v", filename, err.Error())
+		}
+
+		//Try to see if we can grab a new version of the json file. If we can't, we shouldn't try to validate anything.
+		if err := GetJSONFromURL(url, filename); err == nil {
+			log.Printf("Running any additional processing functions...")
+			validation(filename)
+		}
+	}
+}
 
 // GetJSONFromURL gets a json file from an url and stores it in the local backend cache.
 func GetJSONFromURL(jsonURL string, filename string) error {

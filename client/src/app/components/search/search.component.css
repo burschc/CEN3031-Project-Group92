@@ -1,0 +1,16 @@
+.container {
+    width: 450px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+.form {
+    min-width: 100px;
+    max-width: 500px;
+    width: 100%;
+}
+.full-width {
+    width: 50%;
+    height: 20%;
+}
