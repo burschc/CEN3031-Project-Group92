@@ -45,6 +45,8 @@ func main() {
 }
 
 func ServerShutdown() {
+	log.Print("Closing database...")
+	database.Database.Close()
 	log.Print("Shutting down server...")
 	ctx, cancel := context.WithTimeout(context.Background(), arguments.GracefulWait)
 	defer cancel()
