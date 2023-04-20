@@ -22,7 +22,6 @@ func main() {
 	database.DeclareDatabase(database.DatabaseName)
 
 	//Make sure Python is installed and the virtual environment with all the required scripts is available.
-	log.Print("Checking Python Virtual Environment...\n\n")
 	python.SetupPythonVenv()
 
 	//Create the router and server for the web app and register the handlers for the mux_functions.
