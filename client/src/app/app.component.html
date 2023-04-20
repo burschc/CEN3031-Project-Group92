@@ -34,19 +34,19 @@
             <span>About</span>
             </button>
             <br>
-
-           
-    
               
       </mat-sidenav>
       <mat-sidenav-content>
           <router-outlet>
-              <!--<div class="app-sidenav-content">
-                   Map content here
-              </div> -->
+              <div class="app-sidenav-content">
+                  <!-- Map content here -->
+                  <div class="container">
+                    <app-header></app-header>
+                    <!-- <app-select></app-select> -->
+                    <app-map></app-map>
+                  </div>
+              </div>
           </router-outlet>
       </mat-sidenav-content>
   </mat-sidenav-container> 
 </html>
-
-<!--<router-outlet></router-outlet> -->

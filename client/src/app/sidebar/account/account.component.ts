@@ -18,7 +18,7 @@ export class AccountComponent  {
     }    
 
   //form stuff
-  LogInForm: FormGroup;
+  LogInForm!: FormGroup;
   ngOnInit() {
     this.LogInForm = new FormGroup({
       username: new FormControl(null, [Validators.required]),

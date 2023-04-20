@@ -1,15 +1,12 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-//import { FormsModule } from '@angular/forms';
-//import { MatButtonModule } from '@angular/material/button';
 
-import { AccountComponent } from './account/account.component';
-import { ScheduleComponent } from './schedule/schedule.component';
-import { AboutComponent } from './about/about.component';
-import { LinksComponent } from './links/links.component';
-//import {MatFormFieldModule} from '@angular/material/form-field';
-//import {CdkAccordionModule} from '@angular/cdk/accordion';
-
+import { AccountComponent } from './sidebar/account/account.component';
+import { ScheduleComponent } from './sidebar/schedule/schedule.component';
+import { AboutComponent } from './sidebar/about/about.component';
+import { LinksComponent } from './sidebar/links/links.component';
+import { SignupComponent } from './sidebar/signup/signup.component';
+import { LandingComponent } from './sidebar/landing/landing.component';
 
 @Component({
   selector: 'app-root',
@@ -17,9 +14,10 @@ import { LinksComponent } from './links/links.component';
   encapsulation: ViewEncapsulation.None,
   styleUrls: ['./app.component.css']
 })
+
 export class AppComponent {
 
-  title = 'final';
+  title = 'sidebar';
 
   constructor(public dialog: MatDialog) { }
 
@@ -62,4 +60,3 @@ export class AppComponent {
 
 
 } 
-
