@@ -37,7 +37,7 @@ User decal preferences can also be set with /api/account/set/passtype/{passtype}
 - TestSignup: Tests sigining in as two different users. 
 - TestSignin: Tests logging in as those same two users.
 - TestPreexistingUser: Attempts to create a duplicate user with identical credentials to the first user, and create a duplicate user of the second user using the wrong password. Both should fail and return a StatusConflict http error.
-- TestInvalidCredentials: Attempts to sign in to the first user with a slightly wrong password, then attempts to log into the second user's account with the first user's password. Both should fail and reutnr a StatusUnauthorized http error.
+- TestInvalidCredentials: Attempts to sign in to the first user with a slightly wrong password, then attempts to log into the second user's account with the first user's password. Both should fail and reutrn a StatusUnauthorized http error.
 
 ## Documentation
 - "/api/filter/decal/{decal}": Returns a feature collection of all lots matching the given decal
