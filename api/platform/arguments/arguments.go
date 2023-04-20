@@ -14,12 +14,15 @@ import (
 // GracefulWait is the duration for which the server gracefully wait for existing connections to finish
 var GracefulWait time.Duration
 
+// ProcessArguments processes the arguments sent in by the user.
 func ProcessArguments() {
 	flag.DurationVar(&GracefulWait, "graceful-timeout", time.Second*15, "the duration for which the server "+
 		"gracefully wait for existing connections to finish - e.g. 15s or 1m")
 
 	flag.StringVar(&mux_functions.ServerProperties.BackendPort, "port", "8080", "Sets the port used "+
 		"for the web app backend server.")
+
+	flag.StringVar(&python.PythonCmd, "python-cmd", "python", "Sets the command used for python.")
 
 	flagClearCache := flag.Bool("clear-cache", false, "Clears the JSON cache by removing the cache "+
 		"folder entirely. Useful to refresh all of the JSON files used in the web application ahead of the refresh "+
@@ -30,6 +33,8 @@ func ProcessArguments() {
 
 	flagSprint1 := flag.Bool("sprint1", false, "Registers sprint 1 endpoints and sends the default "+
 		"browser to the sprint1 site index.")
+
+	flagIgnorePython := flag.Bool("ignore-python", false, "Ignores python-based web app features.")
 
 	flag.Parse()
 
@@ -61,4 +66,7 @@ func ProcessArguments() {
 		log.Print("Registered Sprint 1 mockup URLs.")
 	}
 
+	if *flagIgnorePython {
+		python.IgnorePython = true
+	}
 }
