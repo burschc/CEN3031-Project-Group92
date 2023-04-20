@@ -6,11 +6,13 @@
 
 ## Work Completed this Sprint
 
-### [Issue 4: Filter based on parking pass type](https://github.com/burschc/CEN3031-Project-Group92/issues/4)
-This allows for users enter a given parking pass type and then be shown only the parking areas that are relevant to them. 
+### [Issue 8: Allow searching for buildings](https://github.com/burschc/CEN3031-Project-Group92/issues/8)
+Allow the search bar to look for specific buildings, and thus see what parking areas are around them.
 
-### [Issue 15: Setup database](https://github.com/burschc/CEN3031-Project-Group92/issues/15)
-This sets up a basic login system using bcrypt which will securely store usernames and passwords. Eventually, users will be able to set their default parking pass, so they can automatically see what spots are relevant to them.
+### [Pull Request 26: Adds cookies for login, tests for accounts, and more features for accounts](https://github.com/burschc/CEN3031-Project-Group92/pull/26)
+This fixes some mistakes with the original login system and adds test cases for it. 
+Additionally adds cookies.go, which allows for the browser to remember if a user is logged in, and as such the basic database has been updated with the appropriate functions to call for setting and expiring cookies.
+User decal preferences can also be set with /api/account/set/passtype/{passtype} and can be gotten at /api/account/get/passtype
 
 ## Unit Tests for Front End
 - it 'should create the app': Simple test which just ensures the app is properly created.
@@ -37,7 +39,6 @@ This sets up a basic login system using bcrypt which will securely store usernam
 - TestPreexistingUser: Attempts to create a duplicate user with identical credentials to the first user, and create a duplicate user of the second user using the wrong password. Both should fail and return a StatusConflict http error.
 - TestInvalidCredentials: Attempts to sign in to the first user with a slightly wrong password, then attempts to log into the second user's account with the first user's password. Both should fail and reutnr a StatusUnauthorized http error.
 
-
 ## Documentation
 - "/api/filter/decal/{decal}": Returns a feature collection of all lots matching the given decal
 - "/api/filter/decals": Returns a list of all entered decal types.
@@ -45,3 +46,5 @@ This sets up a basic login system using bcrypt which will securely store usernam
 - "/api/signup": Given a form, attempts to create a user in the database with the given username and password, with the default parking pass type -1 (any/unspecified). Returns an error if it was unable.
 - "/api/login": Requests a username and password, and if given a valid pair, returns that login was successful. 
 - "/api/version": Returns some information about the current version and the authors.
+- "/api/account/set/passtype/{passtype}": Given the name of a passtype and with a logged in user, sets their internal passtype to whatever was selected. 
+- "/api/account/get/passtype": Returns the passtype stored in a users account.
