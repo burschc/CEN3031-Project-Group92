@@ -51,7 +51,7 @@ func DecalFilterHandlers(r *mux.Router) {
 // decalTypesHandler returns a list of all defined decal types as a json array to the requester.
 func decalTypesHandler(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(GetNames()); err != nil {
+	if err := json.NewEncoder(w).Encode(GetAllNames()); err != nil {
 		httpd.PipeError(w, err)
 	}
 }

@@ -3,10 +3,11 @@ package database
 import (
 	"database/sql"
 	"fmt"
-	"strconv"
-
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
+	"strconv"
+	"ufpmp/httpd"
+	"ufpmp/httpd/cookies"
 
 	"html"
 	"log"
@@ -19,37 +20,52 @@ import (
 	//"google.golang.org/appengine"
 )
 
-// DatabaseName is the filename of the database which stores user account information.
+// DatabaseName is the filename of the Database which stores user account information.
 const DatabaseName = "accountDB"
 
-var database *sql.DB
+type Close func()
+type DB struct {
+	Name     string
+	Database *sql.DB
+	Close
+}
+
+var Database DB
 
 func DatabaseHandlers(r *mux.Router) {
 	r.HandleFunc("/signup", signup).Methods(http.MethodPost, http.MethodOptions)
 	r.HandleFunc("/login", login).Methods(http.MethodPost, http.MethodOptions)
+	r.HandleFunc("/logout", logout).Methods(http.MethodPost, http.MethodOptions)
 
-	log.Print("Registered database handlers.")
+	log.Print("Registered Database handlers.")
 }
 
 func DeclareDatabase(dbname string) {
-	//Open the database.
-	database, _ = sql.Open("sqlite3", dbname)
-	//Make the database if it doesn't exist.
-	statement, _ := database.Prepare("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT, password TEXT, passtype INTEGER)")
+	//Open the Database.
+	Database.Database, _ = sql.Open("sqlite3", dbname)
+	Database.Name = dbname
+	Database.Close = func() {
+		err := Database.Database.Close()
+		if err != nil {
+			log.Printf("Unable to close Database '%v'", Database.Name)
+		}
+	}
+	//Make the Database if it doesn't exist.
+	statement, _ := Database.Database.Prepare("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT, password TEXT, passtype INTEGER)")
 	_, _ = statement.Exec()
 }
 
 func LegacySetupOrOpenBasicDatabase() {
-	//Open the database.
-	database, _ = sql.Open("sqlite3", "testdb.db")
-	//Make the database if it doesn't exist.
-	statement, _ := database.Prepare("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT, password TEXT, passtype INTEGER)")
+	//Open the Database.
+	Database.Database, _ = sql.Open("sqlite3", "testdb.db")
+	//Make the Database if it doesn't exist.
+	statement, _ := Database.Database.Prepare("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT, password TEXT, passtype INTEGER)")
 	_, _ = statement.Exec()
-	//Prepare the to add a user to the database, then actually do it.
-	statement, _ = database.Prepare("INSERT INTO users (username, password, passtype) VALUES (?, ?, ?)")
+	//Prepare the to add a user to the Database, then actually do it.
+	statement, _ = Database.Database.Prepare("INSERT INTO users (username, password, passtype) VALUES (?, ?, ?)")
 	_, _ = statement.Exec("TestUser", "TestPassword", 1)
 	//Prepare to print the entire list of entries.
-	rows, _ := database.Query("SELECT id, username, password, passtype FROM users")
+	rows, _ := Database.Database.Query("SELECT id, username, password, passtype FROM users")
 	var id int
 	var username string
 	var password string
@@ -60,53 +76,64 @@ func LegacySetupOrOpenBasicDatabase() {
 	}
 }
 
-// printDatabase is a test function which prints the contents of the database.
+// printDatabase is a test function which prints the contents of the Database.
 func printDatabase() {
 	//Prepare to print the entire list of entries.
-	rows, _ := database.Query("SELECT id, username, password, passtype FROM users")
+	rows, _ := Database.Database.Query("SELECT id, username, password, passtype FROM users")
 	var id int
 	var username string
 	var password string
 	var passtype int
 	for rows.Next() {
 		rows.Scan(&id, &username, &password, &passtype)
-		fmt.Println(strconv.Itoa(id) + ": " + username + " " + password + " " + strconv.Itoa(passtype))
+		fmt.Println(strconv.Itoa(id) + ": " + username + " | " + password + " | " + strconv.Itoa(passtype))
 	}
 }
 
-// signup adds a specified account with given username and password to the database if it is not already present.
+// signup adds a specified account with given username and password to the Database if it is not already present.
 func signup(res http.ResponseWriter, req *http.Request) {
 
-	req.ParseForm()
+	if err := req.ParseForm(); err != nil {
+		httpd.PipeError(res, err)
+	}
 
 	username := html.EscapeString(req.FormValue("username"))
 	password := html.EscapeString(req.FormValue("password"))
 
 	var user string
 
-	err := database.QueryRow("SELECT username FROM users WHERE username=?", username).Scan(&user)
-	log.Println(err)
-
+	err := Database.Database.QueryRow("SELECT username FROM users WHERE username=?", username).Scan(&user)
+	log.Printf("error: %v", err)
 	switch {
 	case err == sql.ErrNoRows:
-		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-		if err != nil {
-			http.Error(res, "Hash error, unable to create your account.", 500)
+		hashedPassword, err2 := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+		if err2 != nil {
+			http.Error(res, "Hash error, unable to create your account.", http.StatusInternalServerError)
 			return
 		}
+		//log.Printf(string(hashedPassword))
 		//passtype -1 being "no passtype declared" -> defaulting to showing all types
-		if _, err = database.Exec("INSERT INTO users (username, password, passtype) VALUES(?, ?, ?)", username, hashedPassword, -1); err != nil {
-			http.Error(res, "Insert error, unable to create your account.", 500)
+		//http.Error(res, "entered username is "+username+" and password was "+password, http.StatusOK)
+		statement, _ := Database.Database.Prepare("INSERT INTO users (username, password, passtype) VALUES (?, ?, ?)")
+		_, err2 = statement.Exec(username, hashedPassword, -1)
+		if err2 != nil {
+			http.Error(res, "Insert error, unable to create your account.", http.StatusInternalServerError)
 			return
 		}
+		//if _, err = Database.Exec("INSERT INTO users (username, password, passtype) VALUES(?, ?, ?)", username, hashedPassword, -1); err != nil {
+		//	http.Error(res, "Insert error, unable to create your account.", 500)
+		//	return
+		//}
 
 		res.Write([]byte("User created!"))
-		return
 	case err != nil:
-		http.Error(res, "Existing user error, unable to create your account.", 500)
-		return
+
+		res.WriteHeader(http.StatusInternalServerError)
+		res.Write([]byte("Unknown error."))
+		//http.Error(res, "Existing user error, unable to create your account.", http.StatusConflict)
 	default:
-		http.Redirect(res, req, "/", 301)
+		res.WriteHeader(http.StatusConflict)
+		res.Write([]byte("Existing user error, unable to create your account."))
 	}
 }
 
@@ -120,19 +147,25 @@ func login(res http.ResponseWriter, req *http.Request) {
 	var databaseUsername string
 	var databasePassword string
 
-	err := database.QueryRow("SELECT username, password FROM users WHERE username=?", username).Scan(&databaseUsername, &databasePassword)
+	err := Database.Database.QueryRow("SELECT username, password FROM users WHERE username=?", username).Scan(&databaseUsername, &databasePassword)
 
 	if err != nil {
-		http.Redirect(res, req, "/login?retry=1", 301)
+		res.WriteHeader(http.StatusUnauthorized)
+		res.Write([]byte("No user found with that username."))
 		return
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(databasePassword), []byte(password))
 	if err != nil {
-		http.Redirect(res, req, "/login?retry=1", 301)
+		res.WriteHeader(http.StatusUnauthorized)
+		res.Write([]byte("No user found with that password."))
 		return
 	}
 
+	cookies.SetLoginCookie(res, databaseUsername)
 	res.Write([]byte("Hello " + databaseUsername))
+}
 
+func logout(res http.ResponseWriter, req *http.Request) {
+	cookies.ExpireLoginCookie(res, req)
 }

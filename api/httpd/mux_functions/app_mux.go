@@ -5,10 +5,9 @@ import (
 	"os"
 	"time"
 	"ufpmp/httpd/app_handlers/location_search"
-
+	"ufpmp/database/user_data"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-
 	"ufpmp/database"
 	"ufpmp/httpd/app_handlers"
 	"ufpmp/httpd/app_handlers/decal_filter"
@@ -83,6 +82,7 @@ func RegisterHandlers(r *mux.Router) {
 	app_handlers.HttpHandlers(api)
 	database.DatabaseHandlers(api)
 	location_search.LocationSearchHandlers(api)
+	user_data.PreferencesHandlers(api)
 
 	for _, f := range ServerProperties.ContingentRoutes {
 		f(api)
