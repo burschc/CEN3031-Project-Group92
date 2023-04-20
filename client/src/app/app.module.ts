@@ -40,7 +40,7 @@ import { SearchComponent } from './components/search/search.component';
     HeaderComponent,
     SelectComponent,
     ButtonComponent,
-    SearchComponent
+    SearchComponent,
     SettingComponent, 
     AccountComponent, 
     ScheduleComponent, 
