@@ -10,6 +10,7 @@
     "jquery": "^3.6.4",
     "leaflet-ajax": "^2.1.0",
     "leaflet-geojson-vt": "^1.1.0",
+    "leaflet-search": "^3.0.9",
     "ngx-bootstrap": "^10.2.0",
     "ol": "^7.3.0",
     "rxjs": "~7.8.0",
