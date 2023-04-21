@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as Leaflet from 'leaflet'; 
+import 'leaflet-search';
 
 @Component({
   selector: 'app-map', 
@@ -11,10 +12,12 @@ export class MapComponent implements OnInit{
   constructor() {}
 
   serviceData="";
+  buildingData="";
   private map!: Leaflet.Map;
   private centroid: Leaflet.LatLngExpression = [29.64833, -82.34944];
   geojson: Leaflet.GeoJSON<any> | null = null;
-
+  _json: any;
+  buildingjson: any;
 
   private initMap(): void {
     
@@ -34,19 +37,59 @@ export class MapComponent implements OnInit{
       iconAnchor: [25, 32],
     });
     const marker = Leaflet.marker([0,0], {icon: myIcon}).addTo(this.map);
-    marker.setLatLng(this.centroid);
+    // marker.setLatLng(this.centroid);
   }
 
   
-  getParkingLots($event: any) {
-    this.serviceData = $event
-    const url = 'http://localhost:4200/api/filter/decal/' + this.serviceData;
+
+  getBuildings($event: any) {
+    this.buildingData = $event
+    const url = 'http://localhost:4200/api/search/offline/' + this.buildingData;
+    console.log(this.buildingData);
+    console.log(url);
+    var myIcon = Leaflet.icon({
+      iconUrl: 'marker-icon.png',
+      iconSize: [25, 32],
+      iconAnchor: [12, 32],
+      popupAnchor: [0,-28]
+    });
+
 
     fetch(url, {
       method: 'GET'
     })
     .then(response => response.json())
     .then(json => {
+      console.log(json);
+      if (this._json) {
+        this._json.clearLayers();
+      }
+      else {
+        this._json = Leaflet.featureGroup().addTo(this.map);
+        }
+        json.forEach((item: { LAT: number; LON: number; NAME: any; BLDGCODE: string; BLDG: string; ABBREV: string; OFFICIAL_ROOM_NAME: string; }) => {
+          Leaflet.marker([item.LAT, item.LON],{icon: myIcon}).bindPopup("<b>Building: " + item.BLDG + 
+          "<br><b>Building Code: " + item.BLDGCODE +
+          "<br><b>Building Name: " + item.NAME + 
+          "<br><b>Official Room: " + item.OFFICIAL_ROOM_NAME ).addTo(this._json);
+        });
+      })
+    .catch(error => {
+      console.log('error!')
+      console.error(error)
+    });
+  }
+    
+  getParkingLots($event: any) {
+    this.serviceData = $event
+    const url = 'http://localhost:4200/api/filter/decal/' + this.serviceData;
+    console.log(url)
+    fetch(url, {
+      method: 'GET'
+    })
+    .then(response => response.json())
+    .then(json => {
+      console.log(json);
       if (this.geojson) {
         this.geojson.clearLayers();
         this.geojson.addData(json);
