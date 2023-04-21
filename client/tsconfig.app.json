@@ -9,7 +9,6 @@
     "src/main.ts"
   ],
   "include": [
-    "src/**/*.d.ts",
-    "src/assets/schedule.js"
+    "src/**/*.d.ts"
   ]
 }

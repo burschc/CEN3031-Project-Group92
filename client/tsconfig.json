@@ -20,7 +20,7 @@
     "module": "ES2022",
     "useDefineForClassFields": false,
     "allowJs": true,
-    "checkJs": false,
+    "checkJs": false,    
     "lib": [
       "ES2022",
       "dom"

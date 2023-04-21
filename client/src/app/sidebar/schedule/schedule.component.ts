@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-//import { initializeMap } from 'src/assets/schedule.js';
+import { initializeMap } from 'src/assets/schedule.js';
 
 @Component({
   selector: 'schedule',
@@ -15,7 +15,7 @@ export class ScheduleComponent {
     }
 
     ngOnInit(): void {
-      //initializeMap();
+      initializeMap();
     }
 
 }

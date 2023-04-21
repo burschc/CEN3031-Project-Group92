@@ -1,22 +1,23 @@
-const Map = require('ol/Map');
-const Tile = require('ol/layer/Tile');
-const OSM = require('ol/source/OSM');
-const View = require('ol/View');
-const { fromLonLat, transform } = require ('ol/proj');
 
-const Feature = require ('ol/Feature');
-const {Icon, Style, Fill, Stroke} = require('ol/style');
-const Point = require('ol/geom/Point');
-const VectorSource = require('ol/source/Vector');
-const VectorLayer = require('ol/layer').Vector;
-const { Coordinate } = require('ol/coordinate');
-const { LineString } = require('ol/geom');
-const Overlay = require('ol/Overlay');
+import Map from 'ol/Map';
+import Tile from 'ol/layer/Tile';
+import OSM from 'ol/source/OSM';
+import View from 'ol/View';
+import { fromLonLat, transform } from 'ol/proj';
+
+import Feature from 'ol/Feature';
+import {Icon, Style, Fill, Stroke} from 'ol/style';
+import Point from 'ol/geom/Point';
+import VectorSource from 'ol/source/Vector';
+import {Vector as VectorLayer} from 'ol/layer';
+import { Coordinate } from 'ol/coordinate';
+import { LineString } from 'ol/geom';
+import Overlay from 'ol/Overlay';
 
  function initializeMap() {
       //creating the map and its bounds
       var map = new Map({
-        target: 'map',
+        target: 'mymap',
         layers: [
           new Tile({
             source: new OSM()
@@ -136,7 +137,7 @@ const Overlay = require('ol/Overlay');
       map.addLayer(vectorLineLayer);
   
       //placing markers
-      const pts = new VectorLayer({
+      var pts = new VectorLayer({
         source: new VectorSource({
             features: [
             new Feature({
@@ -194,7 +195,7 @@ const Overlay = require('ol/Overlay');
         });
         map.addLayer(pts);
 
-    
+  
         //popup function
         //help from https://stackoverflow.com/questions/66501146/adding-more-than-one-popup-marker-openlayers-map
         var container = document.getElementById('popup');
@@ -229,12 +230,11 @@ const Overlay = require('ol/Overlay');
           }
         }); 
 
-        map.getView().fit(marker.getSource().getExtent(), {
+        map.getView().fit(pts.getSource().getExtent(), {
             padding: [40, 16, 40, 16]
-        });
+        }); 
 
-      
-
+    
   }
 
   export {initializeMap};

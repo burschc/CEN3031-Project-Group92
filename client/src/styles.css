@@ -13,15 +13,7 @@ body {
   font-family: "Poppins", sans-serif;
 }
 
-/* .container {
-  max-width: 500px;
-  margin: 30px auto;
-  overflow: auto;
-  min-height: 300px;
-  border: 1px solid steelblue;
-  padding: 30px;
-  border-radius: 5px;
-} */
+
 .btn {
   display: inline-block;
   background: #000;
@@ -149,7 +141,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   text-align: center !important;
 }
 
-#map {
+#mymap {
   width: 500px;
   height: 300px;
   display: block;

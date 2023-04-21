@@ -1,23 +1,24 @@
 <br>
 <h1><strong>Account</strong></h1>
 
-    <div class="container">
-      <div class="log-in">
-        <form [formGroup]="LogInForm" (ngSubmit)="onSubmit()">
-          <label for="username"><strong>Username</strong></label>
-          <input type="text" class="form-control"
-                id="username" formControlName = "username" placeholder="Enter username">
-            <br>
-          <label for="password"><strong>Password</strong></label>
-          <input type="password" class="form-control"
-               id="password" formControlName = "password" placeholder="Enter username">
-            <br>
+<div class="container">
+  <div class="log-in">
+    <form [formGroup]="LogInForm" (ngSubmit)="onSubmit()">
+      <label for="username"><strong>Username</strong></label>
+      <input type="text" class="form-control"
+            id="username" formControlName = "username" placeholder="Enter username">
+        <br>
+      <label for="password"><strong>Password</strong></label>
+      <input type="password" class="form-control"
+           id="password" formControlName = "password" placeholder="Enter password">
+        <br>
 
-          <button class="btn btn-primary" [disabled]="LogInForm.invalid" type="submit">Log In</button>
-  
-        </form>
-      </div>
-    </div>
+      <button class="btn btn-primary" [disabled]="LogInForm.invalid" type="submit">Log In</button>
+      <button mat-stroked-button>Sign Up</button>
+
+    </form>
+  </div>
+</div>
 
 
 <!-- Have two modals, log in and sign up, then change states-->
