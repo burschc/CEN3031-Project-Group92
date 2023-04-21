@@ -13,15 +13,7 @@ body {
   font-family: "Poppins", sans-serif;
 }
 
-/* .container {
-  max-width: 500px;
-  margin: 30px auto;
-  overflow: auto;
-  min-height: 300px;
-  border: 1px solid steelblue;
-  padding: 30px;
-  border-radius: 5px;
-} */
+
 .btn {
   display: inline-block;
   background: #000;
@@ -81,6 +73,7 @@ body {
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+/* sidebar styling*/
 .about-style mat-dialog-container {
 
   width: 500px;
@@ -95,6 +88,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   text-align: center !important;
 
   /*maybe create a div element around the text and set the width or min-width to 250 */
+}
+
+.info {
+  width:495px;
+  text-align: center;
 }
 
 .acct-style mat-dialog-container {
@@ -117,7 +115,21 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .sched-style mat-dialog-container {
 
-  width: 600px;
+  width: 650px;
+  height: 400px; 
+  overflow: auto;
+
+  border-style: solid !important;
+  border-color: rgb(20, 25, 139) !important; 
+  border: 2px;
+
+  border-radius: 12px !important;
+  text-align: center !important;
+}
+
+.link-style mat-dialog-container {
+
+  width: 450px;
   height: 300px; 
   overflow: auto;
 
@@ -129,16 +141,28 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   text-align: center !important;
 }
 
-.s-style mat-dialog-container {
+#mymap {
+  width: 500px;
+  height: 300px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-  width: 600px;
-  height: 300px; 
-  overflow: auto;
 
-  border-style: solid !important;
-  border-color: rgb(20, 25, 139) !important; 
-  border: 2px;
+li {
+  list-style: none;
+  padding: 10px 30px;
+  text-align: left;
+  background-image: url('./assets/images/pinpoint.png');
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 30px;
+  font-size: 15px;
+}
 
-  border-radius: 12px !important;
-  text-align: center !important;
+#popup {
+  background: white;
+  border: rgb(20, 25, 139) 2px solid;
+  font-size: 12px;
 }

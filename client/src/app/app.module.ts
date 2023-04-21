@@ -18,12 +18,16 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule, Routes }   from '@angular/router';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { SettingComponent } from './setting.component';
-import { AccountComponent } from './account.component';
-import { ScheduleComponent } from './schedule.component';
-import { AboutComponent } from './about.component';
-import { MatFormFieldModule} from '@angular/material/form-field';
-import { CdkAccordionModule} from '@angular/cdk/accordion';
+
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {CdkAccordionModule} from '@angular/cdk/accordion';
+import { AccountComponent } from './sidebar/account/account.component';
+import { ScheduleComponent } from './sidebar/schedule/schedule.component';
+import { AboutComponent } from './sidebar/about/about.component';
+import { LinksComponent } from './sidebar/links/links.component';
+import { SignupComponent } from './sidebar/signup/signup.component';
+import { LandingComponent } from './sidebar/landing/landing.component';
+
 import { AppComponent } from './app.component';
 import { MapComponent } from './components/map/map.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -42,9 +46,13 @@ import { SearchComponent } from './components/search/search.component';
     ButtonComponent,
     SearchComponent,
     SettingComponent, 
+
     AccountComponent, 
     ScheduleComponent, 
-    AboutComponent
+    AboutComponent, 
+    LinksComponent, 
+    SignupComponent, 
+    LandingComponent
   ],
 
   imports: [

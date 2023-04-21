@@ -1,9 +1,12 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { SettingComponent } from './setting.component';
-import { AccountComponent } from './account.component';
-import { ScheduleComponent } from './schedule.component';
-import { AboutComponent } from './about.component';
+
+import { AccountComponent } from './sidebar/account/account.component';
+import { ScheduleComponent } from './sidebar/schedule/schedule.component';
+import { AboutComponent } from './sidebar/about/about.component';
+import { LinksComponent } from './sidebar/links/links.component';
+import { SignupComponent } from './sidebar/signup/signup.component';
+import { LandingComponent } from './sidebar/landing/landing.component';
 
 @Component({
   selector: 'app-root',
@@ -11,15 +14,17 @@ import { AboutComponent } from './about.component';
   encapsulation: ViewEncapsulation.None,
   styleUrls: ['./app.component.css']
 })
+
 export class AppComponent {
-  title = 'final';
+
+  title = 'sidebar';
 
   constructor(public dialog: MatDialog) { }
 
-  openSettings() {
-    const dialogRef = this.dialog.open(SettingComponent, {
-      id: 'setting',
-      panelClass: 's-style'
+  openLinks() {
+    const dialogRef = this.dialog.open(LinksComponent, {
+      id: 'links',
+      panelClass: 'link-style'
     });
 
     console.log(dialogRef);
@@ -51,5 +56,7 @@ export class AppComponent {
 
     console.log(dialogRef);
   }
-}
 
+
+
+} 

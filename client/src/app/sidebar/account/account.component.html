@@ -1,0 +1,29 @@
+<br>
+<h1><strong>Account</strong></h1>
+
+<div class="container">
+  <div class="log-in">
+    <form [formGroup]="LogInForm" (ngSubmit)="onSubmit()">
+      <label for="username"><strong>Username</strong></label>
+      <input type="text" class="form-control"
+            id="username" formControlName = "username" placeholder="Enter username">
+        <br>
+      <label for="password"><strong>Password</strong></label>
+      <input type="password" class="form-control"
+           id="password" formControlName = "password" placeholder="Enter password">
+        <br>
+
+      <button class="btn btn-primary" [disabled]="LogInForm.invalid" type="submit">Log In</button>
+      <button mat-stroked-button>Sign Up</button>
+
+    </form>
+  </div>
+</div>
+
+
+<!-- Have two modals, log in and sign up, then change states-->
+<!-- Favorites, view/edit current parking permit (if user wants to change, take them to website),
+    Update user profile (name, email, profile pic), payment methods(?)
+    Users can look into preferred settings for the page/screen layout
+    After log in, should say, Hi, [User's first name]
+    Should also include sign out button-->
