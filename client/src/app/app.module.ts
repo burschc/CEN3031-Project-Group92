@@ -45,8 +45,6 @@ import { SearchComponent } from './components/search/search.component';
     SelectComponent,
     ButtonComponent,
     SearchComponent,
-    SettingComponent, 
-
     AccountComponent, 
     ScheduleComponent, 
     AboutComponent, 
